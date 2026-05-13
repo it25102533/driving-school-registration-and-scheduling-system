@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/student/subsystem.css}">
+    <title>Student Login</title>
+</head>
+<body>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <h2>Student Login</h2>
+
+        <div th:if="${error != null}" class="error">
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${requiredLogin != null}" class="warning">
+            <span>Please log in to access this page.</span>
+        </div>
+
+        <form action="/login" method="post">
+            <label>Email Address</label>
+            <input type="email" name="email" required placeholder="Enter your email">
+
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="Enter your password">
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <span style="color: #666; font-size: 0.9em;">Don't have an account? </span>
+            <a href="/register" style="color: #007bff; text-decoration: none; font-size: 0.9em; font-weight: bold;">Create one here</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/student/subsystem.css}">
+    <title>Edit Student</title>
+</head>
+<body>
+
+<nav>
+    <a href="/register">Register</a>
+    <a href="/students">Students</a>
+    <a href="/login" style="color: #ffc107; border: 1px solid #ffc107; padding: 5px 10px; border-radius: 4px;">Student Login</a>
+    <a href="/logout" style="color: #dc3545; font-size: 0.9em;">Logout</a>
+</nav>
+
+<div class="container">
+    <h2>Edit Student Information</h2>
+
+    <form th:action="@{/updateStudent}" th:object="${student}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label>Full Name:</label>
+        <input type="text" th:field="*{name}" required>
+
+        <label>Age:</label>
+        <input type="number" th:field="*{age}" required min="17">
+
+        <label>License Type:</label>
+        <input type="text" th:field="*{licenseType}" required>
+
+        <label>Student Type:</label>
+        <select th:field="*{studentType}">
+            <option value="Standard">Standard</option>
+            <option value="Corporate">Corporate</option>
+        </select>
+
+        <label>Phone:</label>
+        <input type="text" th:field="*{phone}" required>
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required>
+
+        <label>New Password (Optional):</label>
+        <input type="password" th:field="*{password}" placeholder="Leave blank to keep current">
+
+        <label>Address:</label>
+        <input type="text" th:field="*{address}">
+
+        <button type="submit" class="btn-success">Update Student</button>
+    </form>
+</div>
+</body>
+</html>

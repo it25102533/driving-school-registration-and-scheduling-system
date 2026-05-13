@@ -31,6 +31,12 @@
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
 
+		<!-- THE MISSING PIECE: Thymeleaf View Engine -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
 		<!-- Security (Added for PasswordEncoder) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
