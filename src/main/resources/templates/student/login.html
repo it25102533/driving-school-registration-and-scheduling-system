@@ -1,38 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/student/subsystem.css}">
-    <title>Student Login</title>
+    <title>Student Login | RoadSync</title>
 </head>
 <body>
-
-<div class="login-wrapper">
-    <div class="login-card">
+<div class="form-wrapper">
+    <div class="form-container">
         <h2>Student Login</h2>
 
-        <div th:if="${error != null}" class="error">
+        <!-- Logic for the 'Required Login' message from the Interceptor -->
+        <div th:if="${requiredLogin}" class="error-msg">
+            <span>Please login to access the dashboard.</span>
+        </div>
+
+        <!-- Logic for invalid credentials error -->
+        <div th:if="${error != null}" class="error-msg">
             <span th:text="${error}"></span>
         </div>
-        <div th:if="${requiredLogin != null}" class="warning">
-            <span>Please log in to access this page.</span>
+
+        <!-- Logic for success message after registration -->
+        <div th:if="${param.success}" class="success-msg">
+            <span>Registration successful! Please login.</span>
         </div>
 
-        <form action="/login" method="post">
-            <label>Email Address</label>
-            <input type="email" name="email" required placeholder="Enter your email">
+        <form th:action="@{/login}" method="post">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email">
 
-            <label>Password</label>
-            <input type="password" name="password" required placeholder="Enter your password">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
 
             <button type="submit">Login</button>
         </form>
 
-        <div style="text-align: center; margin-top: 20px;">
-            <span style="color: #666; font-size: 0.9em;">Don't have an account? </span>
-            <a href="/register" style="color: #007bff; text-decoration: none; font-size: 0.9em; font-weight: bold;">Create one here</a>
+        <div style="text-align: center; margin-top: 15px;">
+            <p>Don't have an account?
+                <a th:href="@{/register}" style="color: #007bff; text-decoration: none; font-weight: bold;">Create an account</a>
+            </p>
         </div>
     </div>
 </div>
-
 </body>
 </html>

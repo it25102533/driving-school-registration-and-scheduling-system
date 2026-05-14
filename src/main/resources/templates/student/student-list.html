@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/student/subsystem.css}">
-    <title>Student List</title>
+    <!-- Updated path to match your static/js/script.js folder -->
+    <script th:src="@{/js/script.js}" defer></script>
+    <title>Student List | RoadSync Admin</title>
 </head>
 <body>
-
 <nav>
-    <a href="/register">Register</a>
-    <a href="/students">Students</a>
-    <a href="/login" style="color: #ffc107; border: 1px solid #ffc107; padding: 5px 10px; border-radius: 4px;">Student Login</a>
-    <a href="/logout" style="color: #dc3545; font-size: 0.9em;">Logout</a>
+    <div class="nav-brand">RoadSync Admin</div>
+    <div class="nav-links">
+        <a th:href="@{/register}">Register</a>
+        <a th:href="@{/students}">Students</a>
+        <a th:href="@{/logout}" class="btn-logout">Logout</a>
+    </div>
 </nav>
 
 <div class="table-container">
@@ -23,34 +28,36 @@
             <th>Email</th>
             <th>Age</th>
             <th>License Type</th>
-            <th>Student Type</th>
             <th>Phone</th>
             <th>Address</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
+        <!-- Check if the list is empty -->
+        <tr th:if="${allStudents == null or allStudents.isEmpty()}">
+            <td colspan="8" style="text-align: center; color: #888;">No students found in the system.</td>
+        </tr>
+        <!-- Loop through student list -->
         <tr th:each="s : ${allStudents}">
             <td th:text="${s.id}"></td>
             <td th:text="${s.name}"></td>
             <td th:text="${s.email}"></td>
             <td th:text="${s.age}"></td>
             <td th:text="${s.licenseType}"></td>
-            <td th:text="${s.studentType}"></td>
             <td th:text="${s.phone}"></td>
             <td th:text="${s.address}"></td>
             <td>
                 <a th:href="@{/editStudent(id=${s.id})}" class="edit-btn">Edit</a>
-                <a th:href="@{/deleteStudent(id=${s.id})}" onclick="return confirm('Are you sure you want to delete this student?')" class="delete-btn">Delete</a>
+                <a th:href="@{/deleteStudent(id=${s.id})}" class="delete-btn">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a href="/register" style="text-decoration: none; color: #28a745; font-weight: bold; border: 2px solid #28a745; padding: 10px 20px; border-radius: 5px; display: inline-block;">+ Register New Student</a>
+        <a th:href="@{/register}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Register New Student</a>
     </div>
 </div>
-
 </body>
 </html>

@@ -21,6 +21,20 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    // --- DASHBOARD LOGIC (NEW MERGE) ---
+    @GetMapping("/student/dashboard")
+    public String showDashboard(HttpSession session, Model model) {
+        // The Interceptor handles the security; we just fetch the data.
+        Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
+
+        // Pass a DTO to the model for the frontend
+        StudentDto studentDto = studentService.getStudentById(loggedInStudent.getId());
+        model.addAttribute("student", studentDto);
+
+        return T + "dashboard";
+    }
+
+    // --- REGISTRATION ---
     @GetMapping("/register")
     public String showForm(Model model) {
         model.addAttribute("student", new StudentDto());
@@ -31,15 +45,44 @@ public class StudentController {
     public String saveStudent(@ModelAttribute("student") StudentDto studentDto, Model model) {
         try {
             studentService.registerStudent(studentDto);
-            return "redirect:/register?success";
+            return "redirect:/login?success"; // Redirect to login after successful signup
         } catch (IllegalArgumentException e) {
-            // Catches the "Email is already registered!" error from the Service
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("student", studentDto); // Keeps what they typed so they don't have to retype it all
+            model.addAttribute("student", studentDto);
             return T + "register";
         }
     }
 
+    // --- AUTHENTICATION ---
+    @GetMapping({"/login", "/login/student"})
+    public String showLoginPage(@RequestParam(required = false) String required, Model model) {
+        if (required != null) {
+            model.addAttribute("requiredLogin", true);
+        }
+        return T + "login";
+    }
+
+    @PostMapping("/login")
+    public String processLogin(StudentLoginDto loginDto, HttpSession session, Model model) {
+        Optional<Student> authenticatedStudent = studentService.authenticate(loginDto);
+
+        if (authenticatedStudent.isPresent()) {
+            // This key MUST match what the Interceptor looks for!
+            session.setAttribute("SESSION_STUDENT", authenticatedStudent.get());
+            return "redirect:/student/dashboard";
+        }
+
+        model.addAttribute("error", "Invalid email or password.");
+        return T + "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // Destroy session
+        return "redirect:/login?logout"; // Return to login page
+    }
+
+    // --- ADMIN/MANAGEMENT (Keep as is) ---
     @GetMapping("/students")
     public String viewStudents(Model model) {
         model.addAttribute("allStudents", studentService.getAllStudents());
@@ -63,32 +106,5 @@ public class StudentController {
     public String updateStudent(@ModelAttribute("student") StudentDto studentDto) {
         studentService.updateStudent(studentDto);
         return "redirect:/students";
-    }
-
-    @GetMapping({"/login", "/login/student"})
-    public String showLoginPage(@RequestParam(required = false) String required, Model model) {
-        if (required != null) {
-            model.addAttribute("requiredLogin", true);
-        }
-        return T + "login";
-    }
-
-    @PostMapping("/login")
-    public String processLogin(StudentLoginDto loginDto, HttpSession session, Model model) {
-        Optional<Student> authenticatedStudent = studentService.authenticate(loginDto);
-
-        if (authenticatedStudent.isPresent()) {
-            session.setAttribute("SESSION_STUDENT", authenticatedStudent.get());
-            return "redirect:/student/dashboard";
-        }
-
-        model.addAttribute("error", "Invalid login credentials.");
-        return T + "login";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
     }
 }
