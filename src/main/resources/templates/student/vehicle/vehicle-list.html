@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/student/subsystem.css}">
+    <script th:src="@{/student/script.js}" defer></script>
+    <title>Vehicle Fleet</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Fleet</span>
+    <a th:href="@{/student/dashboard}" class="nav-right">Dashboard</a>
+</nav>
+
+<div class="table-container">
+    <h2>Vehicle Fleet Management</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Model</th>
+            <th>Plate Number</th>
+            <th>Type</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="v : ${allVehicles}">
+            <td th:text="${v.id}"></td>
+            <td th:text="${v.model}"></td>
+            <td th:text="${v.plateNumber}"></td>
+            <td th:text="${v.type}"></td>
+            <td>
+                <a th:href="@{/vehicles/edit(id=${v.id})}" class="edit-btn">Edit</a>
+                <a th:href="@{/vehicles/delete(id=${v.id})}" class="delete-btn"
+                   onclick="return confirm('Are you sure you want to delete this vehicle?');">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/vehicles/add}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Add New Vehicle</a>
+    </div>
+</div>
+</body>
+</html>
