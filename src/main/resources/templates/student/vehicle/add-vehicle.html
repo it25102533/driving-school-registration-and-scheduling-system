@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/student/subsystem.css}">
+    <title>Add New Vehicle</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Fleet</span>
+    <a th:href="@{/vehicles}" class="nav-right">Back to Fleet</a>
+</nav>
+<div class="form-wrapper">
+    <div class="form-container">
+        <h2>Add New Vehicle</h2>
+        <form th:action="@{/vehicles/save}" th:object="${vehicle}" method="post">
+
+            <label for="model">Vehicle Model:</label>
+            <input type="text" id="model" th:field="*{model}"
+                   placeholder="e.g., Toyota Prius" required>
+
+            <label for="plateNumber">License Plate Number:</label>
+            <input type="text" id="plateNumber" th:field="*{plateNumber}"
+                   placeholder="e.g., ABC-1234" required>
+
+            <label for="type">Transmission / Fuel Type:</label>
+            <input type="text" id="type" th:field="*{type}"
+                   placeholder="e.g., Automatic Petrol" required>
+
+            <button type="submit">Save Vehicle</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
