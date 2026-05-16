@@ -30,10 +30,6 @@ public class Student extends Person {
     @Column(length = 500)
     private String address;
 
-    /**
-     * Logic for calculating discounts.
-     * Placing the string literal first avoids NullPointerExceptions.
-     */
     public double calculateDiscount(double basePrice) {
         if ("Corporate".equalsIgnoreCase(this.studentType)) {
             return basePrice * 0.2;

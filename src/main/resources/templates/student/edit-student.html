@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/student/subsystem.css}">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
     <title>Edit Student | RoadSync</title>
 </head>
 <body>
@@ -20,7 +20,6 @@
         <h2>Edit Student Information</h2>
 
         <form th:action="@{/updateStudent}" th:object="${student}" method="post">
-            <!-- Hidden ID field is essential for JPA to know which record to update -->
             <input type="hidden" th:field="*{id}">
 
             <label for="name">Full Name:</label>
@@ -49,7 +48,6 @@
     </div>
 </div>
 
-<!-- Include script.js if you want any general interactions -->
 <script th:src="@{/js/script.js}"></script>
 </body>
 </html>
