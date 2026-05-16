@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Correct path to your specific CSS location -->
-    <link rel="stylesheet" th:href="@{/templates/templates/subsystem.css}">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
     <title>Student Dashboard | RoadSync</title>
 </head>
 <body>
@@ -12,44 +11,40 @@
 <nav>
     <div class="nav-brand">RoadSync Portal</div>
     <div class="nav-links">
-        <!-- Using th:href for correct context path handling -->
         <a th:href="@{/logout}" class="btn-logout">Logout</a>
     </div>
 </nav>
 
 <main>
     <div class="student-hero">
-        <!-- These variables come from the StudentController showDashboard method -->
         <h1>Hi, <span th:text="${student.name}">Student</span>!</h1>
         <p>Your Student ID is: <span th:text="${student.id}">000</span></p>
         <p>Welcome back to your Driving School Dashboard.</p>
     </div>
 
     <div class="student-grid">
-        <!-- Link these to your actual controller endpoints -->
-        <a class="student-card" th:href="@{/templates/templates/profile}">
+        <a class="student-card" th:href="@{/profile}">
             <h3>Profile</h3>
             <p>View and update your contact details and change your password.</p>
         </a>
 
-        <a class="student-card" th:href="@{/templates/templates/book-lesson}">
+        <a class="student-card" th:href="@{/book-lesson}">
             <h3>Book a lesson</h3>
             <p>Choose an instructor, time, and vehicle preference.</p>
         </a>
 
-        <a class="student-card" th:href="@{/templates/templates/my-lessons}">
+        <a class="student-card" th:href="@{/my-lessons}">
             <h3>My lessons</h3>
             <p>See upcoming sessions, reschedule, or cancel bookings.</p>
         </a>
 
-        <a class="student-card" th:href="@{/templates/templates/packages}">
+        <a class="student-card" th:href="@{/packages}">
             <h3>Packages & purchase</h3>
             <p>Browse lesson bundles and complete payment.</p>
         </a>
     </div>
 </main>
 
-<!-- Include your script.js for the logout confirmation popup -->
-<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/script.js}"></script>
 </body>
 </html>

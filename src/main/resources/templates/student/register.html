@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/templates/templates/subsystem.css}">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
     <title>Driving School Registration | RoadSync</title>
 </head>
 <body>
@@ -18,12 +18,10 @@
     <div class="form-container">
         <h2>New Student Registration</h2>
 
-        <!-- Success Message -->
         <div th:if="${param.success}" class="success-msg">
             Student Registered Successfully!
         </div>
 
-        <!-- Error Message (Captures 'Email already registered' etc. from Controller) -->
         <div th:if="${error != null}" class="error-msg">
             <span th:text="${error}"></span>
         </div>
