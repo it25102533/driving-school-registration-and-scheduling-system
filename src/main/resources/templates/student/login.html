@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/templates/templates/subsystem.css}">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
     <title>Student Login | RoadSync</title>
 </head>
 <body>
@@ -11,17 +11,14 @@
     <div class="form-container">
         <h2>Student Login</h2>
 
-        <!-- Logic for the 'Required Login' message from the Interceptor -->
         <div th:if="${requiredLogin}" class="error-msg">
             <span>Please login to access the dashboard.</span>
         </div>
 
-        <!-- Logic for invalid credentials error -->
         <div th:if="${error != null}" class="error-msg">
             <span th:text="${error}"></span>
         </div>
 
-        <!-- Logic for success message after registration -->
         <div th:if="${param.success}" class="success-msg">
             <span>Registration successful! Please login.</span>
         </div>

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/templates/templates/subsystem.css}">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
     <title>Edit Vehicle</title>
 </head>
 <body>
 <nav>
     <span class="nav-brand">RoadSync Fleet</span>
-    <a th:th:href="@{/vehicles}" class="nav-right">Cancel Edit</a>
+    <a th:href="@{/vehicles}" class="nav-right">Cancel Edit</a>
 </nav>
 
 <div class="form-wrapper">
@@ -18,14 +18,14 @@
         <form th:action="@{/vehicles/update}" th:object="${vehicle}" method="post">
             <input type="hidden" th:field="*{id}">
 
-            <label>Vehicle Model:</label>
-            <input type="text" th:field="*{model}" required>
+            <label for="model">Vehicle Model:</label>
+            <input type="text" id="model" th:field="*{model}" required>
 
-            <label>License Plate Number:</label>
-            <input type="text" th:field="*{plateNumber}" required>
+            <label for="plateNumber">License Plate Number:</label>
+            <input type="text" id="plateNumber" th:field="*{plateNumber}" required>
 
-            <label>Transmission / Fuel Type:</label>
-            <input type="text" th:field="*{type}" required>
+            <label for="type">Transmission / Fuel Type:</label>
+            <input type="text" id="type" th:field="*{type}" required>
 
             <button type="submit">Update Vehicle</button>
         </form>
