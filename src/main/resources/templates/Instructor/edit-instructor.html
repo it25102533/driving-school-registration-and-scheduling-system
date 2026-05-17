@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
+    <title>Edit Instructor</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Staff</span>
+    <a th:href="@{/instructors}" class="nav-right">Cancel Edit</a>
+</nav>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h2>Edit Instructor Information</h2>
+
+        <form th:action="@{/instructors/update}" th:object="${instructor}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" th:field="*{name}" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" th:field="*{phone}" required>
+
+            <label for="licenseNumber">License Number:</label>
+            <input type="text" id="licenseNumber" th:field="*{licenseNumber}" required>
+
+            <label for="specialization">Specialization:</label>
+            <input type="text" id="specialization" th:field="*{specialization}" required>
+
+            <button type="submit">Update Instructor</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

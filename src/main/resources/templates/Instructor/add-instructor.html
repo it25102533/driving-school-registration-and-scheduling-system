@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
+    <title>Add Instructor</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Staff</span>
+    <a th:href="@{/instructors}" class="nav-right">Back to Instructors</a>
+</nav>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h2>Register New Instructor</h2>
+
+        <form th:action="@{/instructors/save}" th:object="${instructor}" method="post">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" th:field="*{name}" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" th:field="*{phone}" required>
+
+            <label for="licenseNumber">License Number:</label>
+            <input type="text" id="licenseNumber" th:field="*{licenseNumber}" placeholder="e.g., INST-54321" required>
+
+            <label for="specialization">Specialization:</label>
+            <input type="text" id="specialization" th:field="*{specialization}" placeholder="e.g., Heavy Vehicles, Defensive Driving" required>
+
+            <button type="submit">Save Instructor</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
