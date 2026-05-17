@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
+    <title>Log Student Progress</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Progress</span>
+    <a th:href="@{/students}" class="nav-right">Back to Students</a>
+</nav>
+
+<div class="form-wrapper">
+    <div class="form-container">
+        <h2>Log Lesson Progress</h2>
+
+        <form th:action="@{/progress/save}" th:object="${progressNote}" method="post">
+
+            <label for="studentId">Select Student:</label>
+            <select id="studentId" th:field="*{studentId}" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc;">
+                <option value="" disabled selected>-- Choose a Student --</option>
+                <option th:each="s : ${students}" th:value="${s.id}" th:text="${s.name}"></option>
+            </select>
+
+            <label for="lessonTopic">Lesson Topic:</label>
+            <input type="text" id="lessonTopic" th:field="*{lessonTopic}" placeholder="e.g., Parallel Parking" required>
+
+            <label for="instructorNote">Instructor Notes:</label>
+            <textarea id="instructorNote" th:field="*{instructorNote}" rows="4" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" placeholder="How did the student do?" required></textarea>
+
+            <button type="submit">Save Progress Note</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

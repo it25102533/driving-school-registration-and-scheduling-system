@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
+    <title>Student Progress Report</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Progress</span>
+    <a th:th:href="@{/students}" class="nav-right">Back to Students</a>
+</nav>
+
+<div class="table-container">
+    <h2>Progress Report for: <span th:text="${student.name}" style="color: #007bff;">Student Name</span></h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Date & Time</th>
+            <th>Lesson Topic</th>
+            <th>Instructor Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="note : ${notes}">
+            <td th:text="${note.dateFormatted}" style="font-weight: bold;"></td>
+            <td th:text="${note.lessonTopic}"></td>
+            <td th:text="${note.instructorNote}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(notes)}">
+            <td colspan="3" style="text-align: center; color: #888;">No progress notes logged yet.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/progress/add}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Log New Progress</a>
+    </div>
+</div>
+</body>
+</html>
