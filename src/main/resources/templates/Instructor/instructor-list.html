@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/subsystem.css}">
+    <script th:src="@{/script.js}" defer></script>
+    <title>Instructor List</title>
+</head>
+<body>
+<nav>
+    <span class="nav-brand">RoadSync Staff</span>
+    <a th:href="@{/student/dashboard}" class="nav-right">Dashboard</a>
+</nav>
+
+<div class="table-container">
+    <h2>Driving Instructors</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>License Number</th>
+            <th>Specialization</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inst : ${allInstructors}">
+            <td th:text="${inst.id}"></td>
+            <td th:text="${inst.name}" style="font-weight: bold;"></td>
+            <td th:text="${inst.phone}"></td>
+            <td th:text="${inst.licenseNumber}"></td>
+            <td th:text="${inst.specialization}"></td>
+            <td>
+                <a th:href="@{/instructors/edit(id=${inst.id})}" class="edit-btn">Edit</a>
+                <a th:href="@{/instructors/delete(id=${inst.id})}" class="delete-btn"
+                   onclick="return confirm('Are you sure you want to remove this instructor record?');">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a th:href="@{/instructors/add}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Add New Instructor</a>
+    </div>
+</div>
+</body>
+</html>
