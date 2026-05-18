@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>My Feedback — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
+</head>
+<body class="rs-landing">
+
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
+
+<main class="rs-main student-shell">
+
+    <div th:replace="~{fragments/student-nav :: nav('feedback')}"></div>
+
+    <div class="student-hero">
+        <h1>My <span style="color: var(--rs-teal);">Feedback</span></h1>
+        <p>Review instructor feedback and notes on your skill development.</p>
+    </div>
+
+    <div class="table-container" style="background: var(--rs-card); border-radius: 12px; padding: 2rem; margin-top: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+            <tr style="border-bottom: 2px solid var(--rs-border); text-align: left;">
+                <th style="padding: 1rem; color: var(--rs-muted);">Date & Time</th>
+                <th style="padding: 1rem; color: var(--rs-muted);">Lesson Topic</th>
+                <th style="padding: 1rem; color: var(--rs-muted);">Instructor Notes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="note : ${notes}" style="border-bottom: 1px solid var(--rs-border);">
+                <td th:text="${note.dateFormatted}" style="padding: 1rem; font-weight: 500; color: var(--rs-text);"></td>
+                <td th:text="${note.lessonTopic}" style="padding: 1rem; color: var(--rs-text);"></td>
+                <td th:text="${note.instructorNote}" style="padding: 1rem; color: var(--rs-text);"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(notes)}">
+                <td colspan="3" style="padding: 2rem; text-align: center; color: var(--rs-muted);">No feedback logged yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
+</body>
+</html>

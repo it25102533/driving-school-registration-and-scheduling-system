@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.service.ProgressService;
 
 import java.util.Optional;
 
@@ -16,9 +17,11 @@ public class StudentController {
 
     private static final String T = "student/";
     private final StudentService studentService;
+    private final ProgressService progressService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, ProgressService progressService) {
         this.studentService = studentService;
+        this.progressService = progressService;
     }
 
     @GetMapping("/student/dashboard")
@@ -32,6 +35,28 @@ public class StudentController {
         StudentDto studentDto = studentService.getStudentById(loggedInStudent.getId());
         model.addAttribute("student", studentDto);
         return T + "dashboard";
+    }
+
+    @GetMapping("/student/progress")
+    public String showProgress(HttpSession session, Model model) {
+        Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
+        if (loggedInStudent == null) {
+            return "redirect:/login";
+        }
+        
+        model.addAttribute("notes", progressService.getNotesForStudent(loggedInStudent.getId()));
+        return T + "progress"; 
+    }
+
+    @GetMapping("/student/feedback")
+    public String showFeedback(HttpSession session, Model model) {
+        Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
+        if (loggedInStudent == null) {
+            return "redirect:/login";
+        }
+        
+        model.addAttribute("notes", progressService.getNotesForStudent(loggedInStudent.getId()));
+        return T + "feedback";
     }
 
     // FIXED: Changed endpoint to /signup to mirror roadsync.html fragments and login templates exactly
