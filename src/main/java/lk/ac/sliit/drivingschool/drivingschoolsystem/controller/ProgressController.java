@@ -1,9 +1,11 @@
 package lk.ac.sliit.drivingschool.drivingschoolsystem.controller;
 
 
+import lk.ac.sliit.drivingschool.drivingschoolsystem.controller.ProfessionalAuthController;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.ProgressNoteDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.ProgressService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +32,11 @@ public class ProgressController {
     }
 
     @PostMapping("/save")
-    public String saveProgress(@ModelAttribute("progressNote") ProgressNoteDto dto) {
+    public String saveProgress(@ModelAttribute("progressNote") ProgressNoteDto dto, HttpSession session) {
         progressService.saveProgress(dto);
-        // Cleanly redirects back to the administrative student list grid view
+        if (session.getAttribute(ProfessionalAuthController.SESSION_INSTRUCTOR) != null) {
+            return "redirect:/instructor/dashboard";
+        }
         return "redirect:/students";
     }
 

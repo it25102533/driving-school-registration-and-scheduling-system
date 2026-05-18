@@ -8,9 +8,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final StudentAuthInterceptor studentAuthInterceptor;
+    private final InstructorAuthInterceptor instructorAuthInterceptor;
 
-    public WebConfig(StudentAuthInterceptor studentAuthInterceptor) {
+    public WebConfig(StudentAuthInterceptor studentAuthInterceptor,
+                     InstructorAuthInterceptor instructorAuthInterceptor) {
         this.studentAuthInterceptor = studentAuthInterceptor;
+        this.instructorAuthInterceptor = instructorAuthInterceptor;
     }
 
     @Override
@@ -21,7 +24,19 @@ public class WebConfig implements WebMvcConfigurer {
                         "/login",
                         "/register",
                         "/saveStudent",
-                        "/student/subsystem.css", // Path for your CSS file
+                        "/student/subsystem.css",
+                        "/js/**",
+                        "/images/**",
+                        "/css/**"
+                );
+
+        registry.addInterceptor(instructorAuthInterceptor)
+                .addPathPatterns("/instructors/**", "/instructor/**", "/progress/**")
+                .excludePathPatterns(
+                        "/login/professional",
+                        "/logout/professional",
+                        "/instructors/add",
+                        "/instructors/save",
                         "/js/**",
                         "/images/**",
                         "/css/**"

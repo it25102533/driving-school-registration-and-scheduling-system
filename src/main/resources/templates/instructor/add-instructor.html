@@ -29,6 +29,14 @@
             <label for="specialization">Specialization:</label>
             <input type="text" id="specialization" th:field="*{specialization}" placeholder="e.g., Heavy Vehicles, Defensive Driving" required>
 
+            <label for="email">Work email (for login):</label>
+            <input type="email" id="email" th:field="*{email}" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="*{password}" required>
+
+            <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+
             <button type="submit">Save Instructor</button>
         </form>
     </div>

@@ -31,6 +31,14 @@
             <label for="specialization">Specialization:</label>
             <input type="text" id="specialization" th:field="*{specialization}" required>
 
+            <label for="email">Work email (for login):</label>
+            <input type="email" id="email" th:field="*{email}" required>
+
+            <label for="password">New password (leave blank to keep current):</label>
+            <input type="password" id="password" th:field="*{password}">
+
+            <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+
             <button type="submit">Update Instructor</button>
         </form>
     </div>

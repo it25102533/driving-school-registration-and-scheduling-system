@@ -22,6 +22,7 @@ public class LessonDto {
 
     // Flattened display fields for readable UI integration
     private String instructorName;
+    private String studentName;
     private String vehicleModel;
     private String formattedDate;
 }

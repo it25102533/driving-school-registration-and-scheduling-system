@@ -30,9 +30,15 @@ public class InstructorController {
     }
 
     @PostMapping("/save")
-    public String saveInstructor(@ModelAttribute("instructor") InstructorDto dto) {
-        instructorService.addInstructor(dto);
-        return "redirect:/instructors";
+    public String saveInstructor(@ModelAttribute("instructor") InstructorDto dto, Model model) {
+        try {
+            instructorService.addInstructor(dto);
+            return "redirect:/instructors";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("instructor", dto);
+            return T + "add-instructor";
+        }
     }
 
     @GetMapping("/edit")
@@ -42,9 +48,15 @@ public class InstructorController {
     }
 
     @PostMapping("/update")
-    public String updateInstructor(@ModelAttribute("instructor") InstructorDto dto) {
-        instructorService.updateInstructor(dto);
-        return "redirect:/instructors";
+    public String updateInstructor(@ModelAttribute("instructor") InstructorDto dto, Model model) {
+        try {
+            instructorService.updateInstructor(dto);
+            return "redirect:/instructors";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("instructor", dto);
+            return T + "edit-instructor";
+        }
     }
 
     @GetMapping("/delete")

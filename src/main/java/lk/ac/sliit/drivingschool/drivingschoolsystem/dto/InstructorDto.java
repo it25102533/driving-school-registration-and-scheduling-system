@@ -17,4 +17,6 @@ public class InstructorDto {
     private String phone;          // Flattened from Person for easy UI binding
     private String licenseNumber;
     private String specialization;
+    private String email;
+    private String password;
 }
