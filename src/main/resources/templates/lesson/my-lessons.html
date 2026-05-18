@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/subsystem.css}">
+  <title>My Lessons</title>
+</head>
+<body>
+<nav>
+  <span class="nav-brand">RoadSync Scheduling</span>
+  <a th:href="@{/student/dashboard}" class="nav-right">Back to Dashboard</a>
+</nav>
+
+<div class="table-container">
+  <h2>My Scheduled Lessons</h2>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Date & Time</th>
+      <th>Instructor</th>
+      <th>Vehicle</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lesson : ${lessons}">
+      <td th:text="${lesson.formattedDate}" style="font-weight: bold;"></td>
+      <td th:text="${lesson.instructorName}"></td>
+      <td th:text="${lesson.vehicleModel}"></td>
+      <td>
+                        <span th:text="${lesson.status}"
+                              th:style="${lesson.status == 'CANCELLED'} ? 'color: red; font-weight: bold;' : 'color: green; font-weight: bold;'">
+                        </span>
+      </td>
+      <td>
+        <a th:if="${lesson.status != 'CANCELLED'}"
+           th:href="@{/student/cancel-lesson(id=${lesson.id})}"
+           class="delete-btn"
+           onclick="return confirm('Are you sure you want to cancel this lesson?')">Cancel</a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(lessons)}">
+      <td colspan="5" style="text-align: center; color: #888;">You have no lessons scheduled.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <a th:href="@{/student/book-lesson}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Book a New Lesson</a>
+  </div>
+</div>
+</body>
+</html>
