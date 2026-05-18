@@ -6,40 +6,34 @@
     <title>My Progress — RoadSync</title>
     <link rel="stylesheet" th:href="@{/landing.css}"/>
     <link rel="stylesheet" th:href="@{/subsystem.css}"/>
+    <style>
+        .progress-card { background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; transition: transform 0.2s; }
+        .progress-card:hover { border-color: var(--rs-teal); transform: translateY(-2px); }
+        .progress-date { color: var(--rs-teal); font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        .progress-topic { color: var(--rs-text); font-size: 1.25rem; margin: 0 0 0.75rem; font-weight: 600; }
+        .progress-note { color: var(--rs-muted); font-size: 1rem; line-height: 1.5; margin: 0; }
+    </style>
 </head>
 <body class="rs-landing">
 
 <header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-<main class="rs-main student-shell">
+<main class="rs-main student-shell" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
 
     <div th:replace="~{fragments/student-nav :: nav('progress')}"></div>
 
-    <div class="student-hero">
-        <h1>My <span style="color: var(--rs-teal);">Progress</span></h1>
-        <p>Review instructor notes and skill development feedback.</p>
-    </div>
+    <div style="flex: 1; padding: 0 1rem;">
+        <h2 style="color: #fff; margin-top: 0; margin-bottom: 2rem;">My Learning Progress</h2>
 
-    <div class="table-container" style="background: var(--rs-card); border-radius: 12px; padding: 2rem; margin-top: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);">
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-            <tr style="border-bottom: 2px solid var(--rs-border); text-align: left;">
-                <th style="padding: 1rem; color: var(--rs-muted);">Date & Time</th>
-                <th style="padding: 1rem; color: var(--rs-muted);">Lesson Topic</th>
-                <th style="padding: 1rem; color: var(--rs-muted);">Instructor Notes</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="note : ${notes}" style="border-bottom: 1px solid var(--rs-border);">
-                <td th:text="${note.dateFormatted}" style="padding: 1rem; font-weight: 500; color: var(--rs-text);"></td>
-                <td th:text="${note.lessonTopic}" style="padding: 1rem; color: var(--rs-text);"></td>
-                <td th:text="${note.instructorNote}" style="padding: 1rem; color: var(--rs-text);"></td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(notes)}">
-                <td colspan="3" style="padding: 2rem; text-align: center; color: var(--rs-muted);">No progress notes logged yet.</td>
-            </tr>
-            </tbody>
-        </table>
+        <div th:if="${#lists.isEmpty(notes)}" style="color: var(--rs-muted); text-align: center; padding: 4rem 2rem; border: 1px dashed var(--rs-border); border-radius: 12px; background: rgba(255,255,255,0.01);">
+            No progress notes have been logged by your instructors yet. Check back after your first lesson!
+        </div>
+
+        <div th:unless="${#lists.isEmpty(notes)}" th:each="note : ${notes}" class="progress-card">
+            <div class="progress-date" th:text="${note.date != null ? #temporals.format(note.date, 'MMMM dd, yyyy - HH:mm') : 'Recent Lesson'}">Date</div>
+            <h3 class="progress-topic" th:text="${note.lessonTopic}">Lesson Topic</h3>
+            <p class="progress-note" th:text="${note.instructorNote}">Instructor's feedback goes here...</p>
+        </div>
     </div>
 </main>
 
