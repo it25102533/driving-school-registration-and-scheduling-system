@@ -55,3 +55,91 @@ button:hover { background-color: #0056b3; }
 .student-card:hover { border-color: rgba(59, 130, 246, 0.45); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 .student-card h3 { margin: 0 0 0.35rem; font-size: 1rem; color: var(--rs-teal); }
 .student-card p { margin: 0; font-size: 0.85rem; color: var(--rs-muted); line-height: 1.45; }
+
+/* --- Student profile (RoadSync theme) --- */
+.student-profile-card {
+  background: var(--rs-card);
+  border: 1px solid var(--rs-border);
+  border-radius: 14px;
+  padding: 2rem;
+  max-width: 560px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+.student-profile-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+  color: var(--rs-text);
+}
+.student-profile-card .profile-hint {
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+  color: var(--rs-muted);
+}
+.student-profile-card label {
+  display: block;
+  margin-top: 0.85rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--rs-muted);
+}
+.student-profile-card input {
+  display: block;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.15rem;
+  border: 1px solid var(--rs-border);
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--rs-text);
+  font-size: 1rem;
+}
+.student-profile-card input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.55);
+  box-shadow: 0 0 0 3px var(--rs-glow);
+}
+.student-profile-card .profile-row {
+  display: flex;
+  gap: 1rem;
+}
+.student-profile-card .profile-row > section { flex: 1; min-width: 0; }
+.student-profile-card .btn-profile-save {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.student-profile-card .btn-profile-save:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px var(--rs-glow);
+}
+.student-profile-card .profile-success {
+  color: var(--rs-teal);
+  background: rgba(20, 184, 166, 0.12);
+  border: 1px solid rgba(20, 184, 166, 0.35);
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.student-profile-card .profile-error {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
