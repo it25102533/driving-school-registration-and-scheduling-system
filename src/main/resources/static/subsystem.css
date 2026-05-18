@@ -2,18 +2,7 @@
 body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; color: #333; }
 
 /* --- Navigation Bar --- */
-nav {
-    background-color: #333;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-}
-
-nav a { color: white; text-decoration: none; font-weight: bold; margin-left: 20px; }
-
-.nav-brand { font-size: 1.4em; color: white; font-weight: bold; }
+/* Removed conflicting global nav styles to allow the premium RoadSync header to display correctly */
 
 .btn-logout {
     color: #dc3545 !important;
@@ -39,8 +28,30 @@ button:hover { background-color: #0056b3; }
 .error-msg { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; }
 
 /* --- Dashboard --- */
-.student-hero { background-color: #007bff; color: white; padding: 50px 20px; text-align: center; }
-.student-grid { display: flex; flex-wrap: wrap; gap: 20px; padding: 40px 20px; justify-content: center; max-width: 1100px; margin: 0 auto; }
-.student-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 250px; text-decoration: none; color: #333; text-align: center; transition: 0.3s; }
-.student-card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-.student-card h3 { color: #007bff; margin-top: 0; }
+.student-shell { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+.student-nav {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem;
+  padding: 0.75rem 1rem; background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 12px;
+}
+.student-nav a {
+  padding: 0.45rem 0.75rem; border-radius: 8px; font-size: 0.88rem; color: var(--rs-muted); text-decoration: none;
+}
+.student-nav a:hover, .student-nav a.active { color: var(--rs-accent); background: rgba(59, 130, 246, 0.12); }
+.student-hero {
+  margin-bottom: 2rem; padding: 1.5rem 1.25rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(20, 184, 166, 0.1) 100%);
+  border: 1px solid var(--rs-border); border-radius: 14px;
+}
+.student-hero h1 { margin: 0 0 0.35rem; font-size: 1.5rem; color: var(--rs-text); }
+.student-hero p { margin: 0; color: var(--rs-muted); font-size: 0.95rem; }
+.student-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;
+}
+.student-card {
+  background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 12px;
+  padding: 1.15rem 1.25rem; text-decoration: none; color: var(--rs-text);
+  display: block; transition: border-color 0.15s, transform 0.2s, box-shadow 0.2s; text-align: left;
+}
+.student-card:hover { border-color: rgba(59, 130, 246, 0.45); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+.student-card h3 { margin: 0 0 0.35rem; font-size: 1rem; color: var(--rs-teal); }
+.student-card p { margin: 0; font-size: 0.85rem; color: var(--rs-muted); line-height: 1.45; }
