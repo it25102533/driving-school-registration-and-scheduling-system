@@ -134,7 +134,27 @@ public class StudentController {
         }
         StudentDto studentDto = studentService.getStudentById(loggedInStudent.getId());
         model.addAttribute("student", studentDto);
-        return T + "edit-student"; // Points directly to templates/student/edit-student.html
+        return T + "profile";
+    }
+
+    @PostMapping("/student/profile")
+    public String updateStudentProfile(@ModelAttribute("student") StudentDto studentDto,
+                                       HttpSession session, Model model) {
+        Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
+        if (loggedInStudent == null) {
+            return "redirect:/login";
+        }
+        if (!loggedInStudent.getId().equals(studentDto.getId())) {
+            return "redirect:/login";
+        }
+        try {
+            studentService.updateStudent(studentDto);
+            return "redirect:/student/profile?success";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("student", studentDto);
+            return T + "profile";
+        }
     }
 
     @GetMapping("/students")
