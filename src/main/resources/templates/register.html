@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Student Sign Up — RoadSync</title>
+
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+
+    <style>
+        .rs-student-login { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+        .signup-card { background: var(--rs-card); border: 1px solid var(--rs-border); padding: 2.5rem; border-radius: 16px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35); width: 100%; max-width: 500px; }
+        .signup-card h2 { text-align: center; color: var(--rs-text); margin: 0 0 0.5rem; font-weight: 600; font-size: 1.5rem; }
+        .signup-card .hint { text-align: center; color: var(--rs-muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
+        .signup-card label { display: block; margin-top: 10px; font-size: 0.9rem; color: var(--rs-muted); font-weight: bold; }
+        .signup-card input, .signup-card textarea, .signup-card select { width: 100%; padding: 0.75rem 1rem; margin: 0.25rem 0 0.5rem; border: 1px solid var(--rs-border); border-radius: 10px; box-sizing: border-box; background: rgba(0, 0, 0, 0.25); color: var(--rs-text); font-size: 1rem; }
+        .btn-login { width: 100%; padding: 0.85rem; margin-top: 1.2rem; background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%); color: #fff; border: none; border-radius: 10px; cursor: pointer; font-size: 1.05rem; font-weight: bold; }
+        .btn-login:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 4px 12px var(--rs-glow); transition: all 0.2s ease;}
+        .error { color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; border: 1px solid #f87171;}
+        .form-row { display: flex; gap: 15px; }
+        .form-group { flex: 1; }
+    </style>
+</head>
+<body class="rs-landing">
+
+<div th:replace="~{fragments/roadsync :: header('signup')}"></div>
+
+<main class="rs-main rs-student-login">
+    <div class="signup-card">
+        <h2>Create your account</h2>
+        <p class="hint">Your details are stored securely. You’ll use your email and password to sign in.</p>
+
+        <div th:if="${error}" class="error" th:text="${error}">Error</div>
+
+        <form th:action="@{/saveStudent}" method="post" th:object="${student}">
+
+            <label for="name">Full Name</label>
+            <input id="name" th:field="*{name}" type="text" placeholder="John Doe" required/>
+
+            <label for="email">Email Address</label>
+            <input id="email" th:field="*{email}" type="email" placeholder="john@example.com" required autocomplete="email"/>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" th:field="*{password}" type="password" placeholder="Min 6 chars" required minlength="6" autocomplete="new-password"/>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm" required minlength="6" autocomplete="new-password"/>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" th:field="*{phone}" type="text" placeholder="e.g. 0771234567" autocomplete="tel"/>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input id="age" th:field="*{age}" type="number" min="16" max="99" required/>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="licenseType">License Type Goal</label>
+                    <input id="licenseType" th:field="*{licenseType}" type="text" placeholder="e.g. Light Vehicle"/>
+                </div>
+                <div class="form-group">
+                    <label for="studentType">Student Type</label>
+                    <select id="studentType" th:field="*{studentType}">
+                        <option value="Individual">Individual</option>
+                        <option value="Corporate">Corporate</option>
+                    </select>
+                </div>
+            </div>
+
+            <label for="address">Home Address</label>
+            <textarea id="address" th:field="*{address}" rows="2" placeholder="123 Main St, City"></textarea>
+
+            <button type="submit" class="btn-login">Create Account</button>
+        </form>
+
+        <p style="margin-top:1.25rem; text-align:center; font-size:0.9rem;">
+            Already registered? <a th:href="@{/login}" style="color:var(--rs-accent); text-decoration: none; font-weight: bold;">Sign in instead</a>
+        </p>
+    </div>
+</main>
+
+<div th:replace="~{fragments/roadsync :: footer}"></div>
+
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
+</body>
+</html>

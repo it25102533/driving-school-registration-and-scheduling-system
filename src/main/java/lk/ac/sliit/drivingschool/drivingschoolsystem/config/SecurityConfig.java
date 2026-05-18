@@ -25,11 +25,6 @@ public class SecurityConfig {
                         .requestMatchers("/student/subsystem.css").permitAll()
                         // Allow all other requests for now while you are building
                         .anyRequest().permitAll()
-                )
-                .formLogin(form -> form
-                        // THIS is the magic line that overrides the ugly default page
-                        .loginPage("/login")
-                        .permitAll()
                 );
 
         return http.build();
