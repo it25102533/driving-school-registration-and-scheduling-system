@@ -22,4 +22,10 @@ public class Instructor extends Person {
 
     private String licenseNumber;
     private String specialization;
+
+    @Column(unique = true, length = 128)
+    private String email;
+
+    @Column(length = 120)
+    private String passwordHash;
 }

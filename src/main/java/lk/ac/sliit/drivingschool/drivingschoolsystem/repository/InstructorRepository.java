@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InstructorRepository extends JpaRepository<Instructor, Long> {
+    java.util.Optional<Instructor> findByEmailIgnoreCase(String email);
+    boolean existsByEmailIgnoreCase(String email);
 }

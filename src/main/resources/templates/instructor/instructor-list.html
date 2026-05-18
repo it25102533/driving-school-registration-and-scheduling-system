@@ -10,7 +10,8 @@
 <body>
 <nav>
     <span class="nav-brand">RoadSync Staff</span>
-    <a th:href="@{/student/dashboard}" class="nav-right">Dashboard</a>
+    <a th:href="@{/instructor/dashboard}" class="nav-right">Dashboard</a>
+    <a th:href="@{/logout/professional}" class="nav-right" style="margin-left: 1rem;">Logout</a>
 </nav>
 
 <div class="table-container">
@@ -23,6 +24,7 @@
             <th>Phone</th>
             <th>License Number</th>
             <th>Specialization</th>
+            <th>Email</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -33,6 +35,7 @@
             <td th:text="${inst.phone}"></td>
             <td th:text="${inst.licenseNumber}"></td>
             <td th:text="${inst.specialization}"></td>
+            <td th:text="${inst.email}"></td>
             <td>
                 <a th:href="@{/instructors/edit(id=${inst.id})}" class="edit-btn">Edit</a>
                 <a th:href="@{/instructors/delete(id=${inst.id})}" class="delete-btn"

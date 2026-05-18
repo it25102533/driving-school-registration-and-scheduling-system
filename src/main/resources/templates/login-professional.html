@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <title>Professional Login — RoadSync</title>
+    <style>
+        .rs-professional-login { min-height: 60vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+        .login-card { background: var(--rs-card); border: 1px solid var(--rs-border); padding: 2.5rem; border-radius: 16px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35); width: 100%; max-width: 440px; }
+        .login-card h2 { text-align: center; color: var(--rs-text); margin: 0 0 0.5rem; font-weight: 600; font-size: 1.35rem; }
+        .login-card .hint { text-align: center; color: var(--rs-muted); font-size: 0.9rem; margin: 0 0 1.5rem; }
+        .login-card input { width: 100%; padding: 0.75rem 1rem; margin: 0.5rem 0; border: 1px solid var(--rs-border); border-radius: 10px; box-sizing: border-box; background: rgba(0, 0, 0, 0.25); color: var(--rs-text); font-size: 1rem; }
+        .btn-login { width: 100%; padding: 0.75rem; margin-top: 0.75rem; background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%); color: #fff; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 600; }
+        .btn-login:hover { filter: brightness(1.06); }
+        .error { color: #f87171; font-size: 0.9rem; text-align: center; margin-bottom: 0.75rem; }
+        .success { color: var(--rs-teal); font-size: 0.9rem; text-align: center; margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body class="rs-landing">
+
+<div th:replace="~{fragments/roadsync :: header('login')}"></div>
+
+<main class="rs-main rs-professional-login">
+    <div class="login-card">
+        <h2>Professional login</h2>
+        <p class="hint">Sign in with your staff email and password to manage lessons, instructors, and student progress.</p>
+
+        <p th:if="${requiredLogin}" class="error">Please sign in to continue.</p>
+        <p th:if="${param.logout}" class="success">You have been signed out.</p>
+
+        <form th:action="@{/login/professional}" method="post">
+            <p th:if="${error}" class="error" th:text="${error}"></p>
+            <input type="email" name="email" placeholder="Work email" required/>
+            <input type="password" name="password" placeholder="Password" required/>
+            <button type="submit" class="btn-login">Sign in</button>
+        </form>
+
+        <p style="text-align:center; margin-top:1.5rem; font-size:0.85rem;">
+            <a th:href="@{/login}" style="color:var(--rs-accent); text-decoration: none;">Student login</a>
+        </p>
+    </div>
+</main>
+
+<div th:replace="~{fragments/roadsync :: footer}"></div>
+
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
+</body>
+</html>

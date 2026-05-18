@@ -76,4 +76,28 @@ public class LessonService {
         lesson.setStatus("CANCELLED");
         lessonRepository.save(lesson);
     }
+
+    public List<LessonDto> getInstructorLessons(Long instructorId) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy - hh:mm a");
+
+        return lessonRepository.findByInstructor_Id(instructorId).stream().map(lesson -> {
+            LessonDto dto = new LessonDto();
+            dto.setId(lesson.getId());
+            dto.setStatus(lesson.getStatus());
+            dto.setVehicleType(lesson.getVehicleType());
+            dto.setStudentName(lesson.getStudent().getName());
+
+            if (lesson.getVehicle() != null) {
+                dto.setVehicleModel(lesson.getVehicle().getModel());
+            } else {
+                dto.setVehicleModel("Not Assigned Yet");
+            }
+
+            if (lesson.getLessonTime() != null) {
+                dto.setFormattedDate(lesson.getLessonTime().format(formatter));
+            }
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }
