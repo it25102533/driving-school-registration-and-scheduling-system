@@ -33,6 +33,17 @@
                 Manage instructors
             </a>
         </div>
+
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--rs-border); max-width: 420px;">
+            <h3 style="margin: 0 0 0.5rem; font-size: 1rem; color: var(--rs-muted);">Account</h3>
+            <p style="margin: 0 0 1rem; font-size: 0.88rem; color: var(--rs-muted); line-height: 1.45;">
+                Permanently delete your professional (instructor) login and profile. Lessons assigned to you will be removed. This cannot be undone.
+            </p>
+            <form th:action="@{/instructor/account/delete}" method="post"
+                  onsubmit="return confirm('Delete your professional account permanently? This cannot be undone.');">
+                <button type="submit" class="delete-btn" style="width: auto; cursor: pointer;">Delete my professional account</button>
+            </form>
+        </div>
     </div>
 </main>
 
