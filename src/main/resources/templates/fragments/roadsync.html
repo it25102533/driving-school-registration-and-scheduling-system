@@ -65,6 +65,16 @@
   </div>
 </header>
 
+<nav class="rs-toolbar" th:fragment="staffToolbar" aria-label="Staff navigation">
+  <span class="rs-toolbar-brand">Staff</span>
+  <a th:href="@{/instructor/dashboard}">Staff home</a>
+  <a th:href="@{/students}">Students</a>
+  <a th:href="@{/instructors}">Instructors</a>
+  <a th:href="@{/vehicles}">Vehicles</a>
+  <a th:href="@{/progress/add}">Log progress</a>
+  <a th:href="@{/logout/professional}" class="rs-toolbar-logout">Staff logout</a>
+</nav>
+
 <footer class="rs-footer" th:fragment="footer">
   <div class="rs-footer-inner">
     <div class="rs-footer-brand">

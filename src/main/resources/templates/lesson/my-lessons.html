@@ -1,56 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" th:href="@{/subsystem.css}">
-  <title>My Lessons</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>My Lessons — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-  <span class="nav-brand">RoadSync Scheduling</span>
-  <a th:href="@{/student/dashboard}" class="nav-right">Back to Dashboard</a>
-</nav>
+<body class="rs-landing">
 
-<div class="table-container">
-  <h2>My Scheduled Lessons</h2>
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-  <table>
-    <thead>
-    <tr>
-      <th>Date & Time</th>
-      <th>Instructor</th>
-      <th>Vehicle</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="lesson : ${lessons}">
-      <td th:text="${lesson.formattedDate}" style="font-weight: bold;"></td>
-      <td th:text="${lesson.instructorName}"></td>
-      <td th:text="${lesson.vehicleModel}"></td>
-      <td>
-                        <span th:text="${lesson.status}"
-                              th:style="${lesson.status == 'CANCELLED'} ? 'color: red; font-weight: bold;' : 'color: green; font-weight: bold;'">
-                        </span>
-      </td>
-      <td>
-        <a th:if="${lesson.status != 'CANCELLED'}"
-           th:href="@{/student/cancel-lesson(id=${lesson.id})}"
-           class="delete-btn"
-           onclick="return confirm('Are you sure you want to cancel this lesson?')">Cancel</a>
-      </td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(lessons)}">
-      <td colspan="5" style="text-align: center; color: #888;">You have no lessons scheduled.</td>
-    </tr>
-    </tbody>
-  </table>
+<main class="rs-main student-shell">
+    <div th:replace="~{fragments/student-nav :: nav('lessons')}"></div>
 
-  <div style="text-align: center; margin-top: 20px;">
-    <a th:href="@{/student/book-lesson}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Book a New Lesson</a>
-  </div>
-</div>
+    <div class="student-hero">
+        <h1>My <span style="color: var(--rs-teal);">lessons</span></h1>
+        <p>Upcoming sessions and cancellations.</p>
+    </div>
+
+    <div class="table-container">
+        <h2>Scheduled lessons</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Date &amp; time</th>
+                <th>Instructor</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lesson : ${lessons}">
+                <td th:text="${lesson.formattedDate}" style="font-weight: 600;"></td>
+                <td th:text="${lesson.instructorName}"></td>
+                <td th:text="${lesson.vehicleModel}"></td>
+                <td>
+                    <span th:text="${lesson.status}"
+                          th:classappend="${lesson.status == 'CANCELLED'} ? ' rs-status-bad' : ' rs-status-ok'"></span>
+                </td>
+                <td>
+                    <a th:if="${lesson.status != 'CANCELLED'}"
+                       th:href="@{/student/cancel-lesson(id=${lesson.id})}"
+                       class="delete-btn"
+                       onclick="return confirm('Cancel this lesson?');">Cancel</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(lessons)}">
+                <td colspan="5" style="text-align: center; color: var(--rs-muted);">You have no lessons scheduled.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align: center;">
+            <a th:href="@{/student/book-lesson}" class="rs-inline-link">+ Book a new lesson</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

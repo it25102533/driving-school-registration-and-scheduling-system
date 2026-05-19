@@ -1,44 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
-    <title>My Lessons</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>My Lessons — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-    <span class="nav-brand">RoadSync Staff</span>
-    <a th:href="@{/instructor/dashboard}" class="nav-right">Dashboard</a>
-</nav>
+<body class="rs-landing">
 
-<div class="table-container">
-    <h2>Lessons assigned to me</h2>
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Date &amp; Time</th>
-            <th>Student</th>
-            <th>Vehicle</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="lesson : ${lessons}">
-            <td th:text="${lesson.formattedDate}" style="font-weight: bold;"></td>
-            <td th:text="${lesson.studentName}"></td>
-            <td th:text="${lesson.vehicleModel}"></td>
-            <td>
-                <span th:text="${lesson.status}"
-                      th:style="${lesson.status == 'CANCELLED'} ? 'color: red; font-weight: bold;' : 'color: green; font-weight: bold;'"></span>
-            </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(lessons)}">
-            <td colspan="4" style="text-align: center; color: #888;">No lessons scheduled yet.</td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<main class="rs-main student-shell">
+    <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
+
+    <div class="rs-page-nav">
+        <span class="nav-brand">My lessons</span>
+        <div class="nav-links">
+            <a th:href="@{/instructor/dashboard}">Dashboard</a>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h2>Lessons assigned to me</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Date &amp; time</th>
+                <th>Student</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lesson : ${lessons}">
+                <td th:text="${lesson.formattedDate}" style="font-weight: 600;"></td>
+                <td th:text="${lesson.studentName}"></td>
+                <td th:text="${lesson.vehicleModel}"></td>
+                <td>
+                    <span th:text="${lesson.status}"
+                          th:classappend="${lesson.status == 'CANCELLED'} ? ' rs-status-bad' : ' rs-status-ok'"></span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(lessons)}">
+                <td colspan="4" style="text-align: center; color: var(--rs-muted);">No lessons scheduled.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

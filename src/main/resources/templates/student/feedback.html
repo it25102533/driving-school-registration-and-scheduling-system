@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
     <title>Submit Feedback — RoadSync</title>
     <link rel="stylesheet" th:href="@{/landing.css}"/>
     <link rel="stylesheet" th:href="@{/subsystem.css}"/>
     <style>
         .feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1rem; }
         .feedback-card { background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 16px; padding: 2rem; }
-        .feedback-card h3 { color: #3b82f6; margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem; }
+        .feedback-card h3 { color: var(--rs-accent); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem; }
         .feedback-card label { display: block; margin-top: 15px; color: var(--rs-muted); font-size: 0.9rem; font-weight: bold; }
-        .feedback-card input, .feedback-card select, .feedback-card textarea { width: 100%; padding: 0.75rem; margin-top: 0.5rem; border-radius: 8px; border: 1px solid var(--rs-border); background: rgba(0,0,0,0.2); color: white; box-sizing: border-box; }
+        .feedback-card input, .feedback-card select, .feedback-card textarea { width: 100%; padding: 0.75rem; margin-top: 0.5rem; border-radius: 8px; border: 1px solid var(--rs-border); background: rgba(0,0,0,0.2); color: var(--rs-text); box-sizing: border-box; }
         .feedback-btn { width: 100%; padding: 0.85rem; margin-top: 1.5rem; background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: filter 0.2s; }
         .feedback-btn:hover { filter: brightness(1.1); }
         .success-alert { background: rgba(20, 184, 166, 0.1); color: var(--rs-teal); padding: 1rem; border-radius: 8px; border: 1px solid var(--rs-teal); text-align: center; margin-bottom: 2rem; }
@@ -21,13 +22,16 @@
 
 <header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-<main class="rs-main student-shell" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+<main class="rs-main student-shell">
 
     <div th:replace="~{fragments/student-nav :: nav('feedback')}"></div>
 
-    <div style="flex: 1; padding: 0 1rem;">
-        <h2 style="color: #fff; margin-top: 0; margin-bottom: 1.5rem;">Submit Feedback</h2>
+    <div class="student-hero">
+        <h1>Submit <span style="color: var(--rs-teal);">feedback</span></h1>
+        <p>Rate your instructor or a course package.</p>
+    </div>
 
+    <div>
         <div th:if="${param.sent}" class="success-alert">
             Thank you! Your feedback has been submitted successfully.
         </div>

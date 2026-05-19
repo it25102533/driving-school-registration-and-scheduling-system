@@ -1,145 +1,575 @@
-/* --- Global Styles --- */
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; color: #333; }
+/* RoadSync — subsystem pages (load after landing.css, use body.rs-landing) */
+:root {
+    --rs-bg: #0c1222;
+    --rs-surface: #121a2e;
+    --rs-card: #161f36;
+    --rs-border: rgba(255, 255, 255, 0.08);
+    --rs-text: #e8ecf4;
+    --rs-muted: #8b95a8;
+    --rs-accent: #3b82f6;
+    --rs-accent-dim: #2563eb;
+    --rs-teal: #14b8a6;
+    --rs-glow: rgba(59, 130, 246, 0.35);
+    --rs-danger: #f87171;
+}
 
-/* --- Navigation Bar --- */
-/* Removed conflicting global nav styles to allow the premium RoadSync header to display correctly */
+/* --- Staff toolbar (under main site header) --- */
+.rs-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    border-radius: 12px;
+}
+
+.rs-toolbar-brand {
+    font-weight: 700;
+    color: var(--rs-text);
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.rs-toolbar a {
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: var(--rs-muted);
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+}
+
+.rs-toolbar a:hover {
+    color: var(--rs-accent);
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.rs-toolbar a.rs-toolbar-logout {
+    margin-left: auto;
+    color: var(--rs-danger);
+}
+
+.rs-toolbar a.rs-toolbar-logout:hover {
+    background: rgba(248, 113, 113, 0.12);
+    color: #fca5a5;
+}
+
+/* --- Legacy page nav (optional; prefer student-nav or rs-toolbar) --- */
+.rs-page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    border-radius: 12px;
+}
+
+.rs-page-nav .nav-brand {
+    font-weight: 700;
+    color: var(--rs-text);
+    font-size: 0.95rem;
+}
+
+.rs-page-nav .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.rs-page-nav a {
+    color: var(--rs-muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: 8px;
+}
+
+.rs-page-nav a:hover {
+    color: var(--rs-accent);
+    background: rgba(59, 130, 246, 0.1);
+}
 
 .btn-logout {
-    color: #dc3545 !important;
-    background: white;
-    padding: 5px 15px;
-    border-radius: 5px;
-    transition: 0.3s;
+    color: var(--rs-danger) !important;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
-.btn-logout:hover { background: #f8d7da; }
+.btn-logout:hover {
+    background: rgba(248, 113, 113, 0.2);
+}
 
-/* --- Forms --- */
-.form-wrapper { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
-.form-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; margin: 20px auto; }
-.form-container h2 { text-align: center; color: #007bff; margin-bottom: 20px; }
-label { display: block; margin-bottom: 5px; font-weight: bold; }
-input { display: block; margin-bottom: 15px; width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-button { background-color: #007bff; color: white; border: none; padding: 12px 20px; cursor: pointer; width: 100%; border-radius: 4px; font-weight: bold; }
-button:hover { background-color: #0056b3; }
+/* --- Forms (scoped to .form-container) --- */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: auto;
+    padding: 0 0 2rem;
+}
+
+.form-container {
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    padding: 2rem;
+    border-radius: 14px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+}
+
+.form-container.rs-form-wide {
+    max-width: 560px;
+}
+
+.form-container h2 {
+    text-align: center;
+    color: var(--rs-text);
+    margin: 0 0 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--rs-muted);
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+    display: block;
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--rs-border);
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--rs-text);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-container input:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.55);
+    box-shadow: 0 0 0 3px var(--rs-glow);
+}
+
+.form-container button[type="submit"] {
+    background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%);
+    color: #fff;
+    border: none;
+    padding: 0.85rem 1.25rem;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 0.25rem;
+    transition: filter 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.form-container button[type="submit"]:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px var(--rs-glow);
+}
 
 /* --- Alerts --- */
-.success-msg { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center; }
-.error-msg { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; }
+.success-msg {
+    color: var(--rs-teal);
+    background: rgba(20, 184, 166, 0.12);
+    border: 1px solid rgba(20, 184, 166, 0.35);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
 
-/* --- Dashboard --- */
-.student-shell { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+.error-msg {
+    color: var(--rs-danger);
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* --- Tables --- */
+.table-container {
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    border-radius: 14px;
+    padding: 1.5rem 1.25rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.table-container h2 {
+    margin: 0 0 1.25rem;
+    color: var(--rs-text);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th {
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    color: var(--rs-muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid var(--rs-border);
+}
+
+.table-container td {
+    padding: 0.75rem 0.5rem;
+    color: var(--rs-text);
+    border-bottom: 1px solid var(--rs-border);
+    font-size: 0.92rem;
+}
+
+.table-container tbody tr:hover td {
+    background: rgba(59, 130, 246, 0.06);
+}
+
+.edit-btn {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    margin-right: 0.35rem;
+    background: rgba(59, 130, 246, 0.18);
+    color: var(--rs-accent);
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    transition: background 0.15s;
+}
+
+.edit-btn:hover {
+    background: rgba(59, 130, 246, 0.28);
+}
+
+.delete-btn {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    background: rgba(248, 113, 113, 0.12);
+    color: var(--rs-danger);
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    transition: background 0.15s;
+}
+
+.delete-btn:hover {
+    background: rgba(248, 113, 113, 0.2);
+}
+
+.rs-inline-link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    text-align: center;
+    width: 100%;
+    color: var(--rs-accent);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.92rem;
+}
+
+.rs-inline-link:hover {
+    text-decoration: underline;
+}
+
+/* --- Package store --- */
+.rs-package-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.rs-package-card {
+    text-align: center;
+    border: 1px solid var(--rs-border);
+    padding: 1.75rem 1.5rem;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 280px;
+    background: var(--rs-surface);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.rs-package-card:hover {
+    border-color: rgba(59, 130, 246, 0.45);
+    transform: translateY(-3px);
+}
+
+.rs-package-card h3 {
+    margin: 0 0 0.5rem;
+    color: var(--rs-text);
+    font-size: 1.1rem;
+}
+
+.rs-package-card p {
+    color: var(--rs-muted);
+    font-size: 0.9rem;
+    margin: 0.35rem 0;
+}
+
+.rs-package-price {
+    color: var(--rs-teal);
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0.75rem 0;
+}
+
+.rs-package-card .rs-btn-buy {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s;
+}
+
+.rs-package-card .rs-btn-buy:hover {
+    filter: brightness(1.08);
+}
+
+/* --- Dashboard / student shell --- */
+.student-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+}
+
 .student-nav {
-  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem;
-  padding: 0.75rem 1rem; background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    border-radius: 12px;
 }
+
 .student-nav a {
-  padding: 0.45rem 0.75rem; border-radius: 8px; font-size: 0.88rem; color: var(--rs-muted); text-decoration: none;
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: var(--rs-muted);
+    text-decoration: none;
 }
-.student-nav a:hover, .student-nav a.active { color: var(--rs-accent); background: rgba(59, 130, 246, 0.12); }
+
+.student-nav a:hover,
+.student-nav a.active {
+    color: var(--rs-accent);
+    background: rgba(59, 130, 246, 0.12);
+}
+
 .student-hero {
-  margin-bottom: 2rem; padding: 1.5rem 1.25rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(20, 184, 166, 0.1) 100%);
-  border: 1px solid var(--rs-border); border-radius: 14px;
+    margin-bottom: 2rem;
+    padding: 1.5rem 1.25rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(20, 184, 166, 0.1) 100%);
+    border: 1px solid var(--rs-border);
+    border-radius: 14px;
 }
-.student-hero h1 { margin: 0 0 0.35rem; font-size: 1.5rem; color: var(--rs-text); }
-.student-hero p { margin: 0; color: var(--rs-muted); font-size: 0.95rem; }
+
+.student-hero h1 {
+    margin: 0 0 0.35rem;
+    font-size: 1.5rem;
+    color: var(--rs-text);
+}
+
+.student-hero p {
+    margin: 0;
+    color: var(--rs-muted);
+    font-size: 0.95rem;
+}
+
 .student-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
 }
+
 .student-card {
-  background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 12px;
-  padding: 1.15rem 1.25rem; text-decoration: none; color: var(--rs-text);
-  display: block; transition: border-color 0.15s, transform 0.2s, box-shadow 0.2s; text-align: left;
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    border-radius: 12px;
+    padding: 1.15rem 1.25rem;
+    text-decoration: none;
+    color: var(--rs-text);
+    display: block;
+    transition: border-color 0.15s, transform 0.2s, box-shadow 0.2s;
+    text-align: left;
 }
-.student-card:hover { border-color: rgba(59, 130, 246, 0.45); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-.student-card h3 { margin: 0 0 0.35rem; font-size: 1rem; color: var(--rs-teal); }
-.student-card p { margin: 0; font-size: 0.85rem; color: var(--rs-muted); line-height: 1.45; }
+
+.student-card:hover {
+    border-color: rgba(59, 130, 246, 0.45);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.student-card h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    color: var(--rs-teal);
+}
+
+.student-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--rs-muted);
+    line-height: 1.45;
+}
 
 /* --- Student profile (RoadSync theme) --- */
 .student-profile-card {
-  background: var(--rs-card);
-  border: 1px solid var(--rs-border);
-  border-radius: 14px;
-  padding: 2rem;
-  max-width: 560px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    background: var(--rs-card);
+    border: 1px solid var(--rs-border);
+    border-radius: 14px;
+    padding: 2rem;
+    max-width: 560px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
 }
+
 .student-profile-card h2 {
-  margin: 0 0 0.35rem;
-  font-size: 1.25rem;
-  color: var(--rs-text);
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    color: var(--rs-text);
 }
+
 .student-profile-card .profile-hint {
-  margin: 0 0 1.5rem;
-  font-size: 0.9rem;
-  color: var(--rs-muted);
+    margin: 0 0 1.5rem;
+    font-size: 0.9rem;
+    color: var(--rs-muted);
 }
+
 .student-profile-card label {
-  display: block;
-  margin-top: 0.85rem;
-  margin-bottom: 0.25rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--rs-muted);
+    display: block;
+    margin-top: 0.85rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--rs-muted);
 }
+
 .student-profile-card input {
-  display: block;
-  width: 100%;
-  padding: 0.7rem 1rem;
-  margin-bottom: 0.15rem;
-  border: 1px solid var(--rs-border);
-  border-radius: 10px;
-  box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--rs-text);
-  font-size: 1rem;
+    display: block;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.15rem;
+    border: 1px solid var(--rs-border);
+    border-radius: 10px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--rs-text);
+    font-size: 1rem;
 }
+
 .student-profile-card input:focus {
-  outline: none;
-  border-color: rgba(59, 130, 246, 0.55);
-  box-shadow: 0 0 0 3px var(--rs-glow);
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.55);
+    box-shadow: 0 0 0 3px var(--rs-glow);
 }
+
 .student-profile-card .profile-row {
-  display: flex;
-  gap: 1rem;
+    display: flex;
+    gap: 1rem;
 }
-.student-profile-card .profile-row > section { flex: 1; min-width: 0; }
+
+.student-profile-card .profile-row > section {
+    flex: 1;
+    min-width: 0;
+}
+
 .student-profile-card .btn-profile-save {
-  width: 100%;
-  margin-top: 1.5rem;
-  padding: 0.85rem;
-  background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: filter 0.15s, transform 0.15s, box-shadow 0.15s;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.85rem;
+    background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.15s, box-shadow 0.15s;
 }
+
 .student-profile-card .btn-profile-save:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px var(--rs-glow);
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px var(--rs-glow);
 }
+
 .student-profile-card .profile-success {
-  color: var(--rs-teal);
-  background: rgba(20, 184, 166, 0.12);
-  border: 1px solid rgba(20, 184, 166, 0.35);
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  text-align: center;
+    color: var(--rs-teal);
+    background: rgba(20, 184, 166, 0.12);
+    border: 1px solid rgba(20, 184, 166, 0.35);
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
 }
+
 .student-profile-card .profile-error {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.35);
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  text-align: center;
+    color: var(--rs-danger);
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.rs-status-ok {
+    color: var(--rs-teal);
+    font-weight: 600;
+}
+
+.rs-status-bad {
+    color: var(--rs-danger);
+    font-weight: 600;
 }

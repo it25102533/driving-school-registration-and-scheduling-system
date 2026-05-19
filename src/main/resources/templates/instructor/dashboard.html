@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
-    <title>Instructor Dashboard</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Staff Home — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-    <span class="nav-brand">RoadSync Staff</span>
-    <a th:href="@{/logout/professional}" class="nav-right">Logout</a>
-</nav>
+<body class="rs-landing">
 
-<div class="table-container" style="max-width: 720px; margin: 2rem auto;">
-    <h2>Welcome, <span th:text="${instructor.name}">Instructor</span></h2>
-    <p style="color: #666; margin-bottom: 1.5rem;">
-        <span th:text="${instructor.specialization}">Specialization</span>
-        · License <span th:text="${instructor.licenseNumber}">—</span>
-    </p>
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-    <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-        <a th:href="@{/instructor/my-lessons}" class="edit-btn" style="display:block; text-align:center; padding:1.25rem;">
-            My scheduled lessons
-        </a>
-        <a th:href="@{/progress/add}" class="edit-btn" style="display:block; text-align:center; padding:1.25rem;">
-            Log student progress
-        </a>
-        <a th:href="@{/instructors}" class="edit-btn" style="display:block; text-align:center; padding:1.25rem;">
-            Manage instructors
-        </a>
+<main class="rs-main student-shell">
+    <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
+
+    <div class="table-container" style="max-width: 720px;">
+        <h2>Welcome, <span th:text="${instructor.name}">Instructor</span></h2>
+        <p style="color: var(--rs-muted); margin-bottom: 1.5rem;">
+            <span th:text="${instructor.specialization}">Specialization</span>
+            · License <span th:text="${instructor.licenseNumber}">—</span>
+        </p>
+
+        <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <a th:href="@{/instructor/my-lessons}" class="edit-btn" style="display:block; text-align:center; padding:1.25rem;">
+                My scheduled lessons
+            </a>
+            <a th:href="@{/progress/add}" class="edit-btn" style="display:block; text-align:center; padding:1.25rem;">
+                Log student progress
+            </a>
+            <a th:href="@{/instructors}" class="edit-btn" style="display:block; text-align:center; padding:1.25rem;">
+                Manage instructors
+            </a>
+        </div>
     </div>
-</div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>
