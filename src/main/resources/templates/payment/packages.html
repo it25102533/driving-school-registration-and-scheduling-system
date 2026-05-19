@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
-    <title>Lesson Packages</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Lesson Packages — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-    <span class="nav-brand">RoadSync Store</span>
-    <a th:href="@{/student/dashboard}" class="nav-right">Back to Dashboard</a>
-</nav>
+<body class="rs-landing">
 
-<div class="table-container">
-    <h2 style="text-align: center;">Available Lesson Packages</h2>
-    <div class="student-grid" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
-        <div class="student-card" th:each="pkg : ${packages}" style="text-align: center; border: 1px solid #ddd; padding: 20px; border-radius: 8px; width: 250px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <h3 th:text="${pkg.packageName}"></h3>
-            <p><strong th:text="${pkg.numberOfLessons}"></strong> Lessons</p>
-            <h2 style="color: #28a745;">Rs. <span th:text="${#numbers.formatDecimal(pkg.basePrice, 1, 'COMMA', 2, 'POINT')}">0.00</span></h2>
-            <p style="font-size: 0.85em; color: #666; font-style: italic; margin-bottom: 15px;">(Your student discount will be applied automatically!)</p>
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-            <form th:action="@{/student/buy-package}" method="post">
-                <input type="hidden" name="packageId" th:value="${pkg.id}">
-                <button type="submit" onclick="return confirm('Are you sure you want to purchase this lesson package?')" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%;">Buy Now</button>
-            </form>
+<main class="rs-main student-shell">
+    <div th:replace="~{fragments/student-nav :: nav('packages')}"></div>
+
+    <div class="student-hero">
+        <h1>Lesson <span style="color: var(--rs-teal);">packages</span></h1>
+        <p>Your student discount is applied automatically at checkout.</p>
+    </div>
+
+    <div class="table-container" style="max-width: 960px;">
+        <h2 style="text-align: center;">Available packages</h2>
+        <div class="rs-package-grid">
+            <div class="rs-package-card" th:each="pkg : ${packages}">
+                <h3 th:text="${pkg.packageName}">Package</h3>
+                <p><strong th:text="${pkg.numberOfLessons}">0</strong> lessons</p>
+                <p class="rs-package-price">Rs. <span th:text="${#numbers.formatDecimal(pkg.basePrice, 1, 'COMMA', 2, 'POINT')}">0.00</span></p>
+                <p style="font-size: 0.85rem; color: var(--rs-muted); font-style: italic;">Discount applied at purchase.</p>
+                <form th:action="@{/student/buy-package}" method="post">
+                    <input type="hidden" name="packageId" th:value="${pkg.id}">
+                    <button type="submit" class="rs-btn-buy" onclick="return confirm('Purchase this package?');">Buy now</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

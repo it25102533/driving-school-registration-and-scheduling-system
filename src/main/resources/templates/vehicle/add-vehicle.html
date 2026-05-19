@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
-    <title>Add New Vehicle</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Add Vehicle — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-    <span class="nav-brand">RoadSync Fleet</span>
-    <a th:href="@{/vehicles}" class="nav-right">Back to Fleet</a>
-</nav>
+<body class="rs-landing">
 
-<div class="form-wrapper">
-    <div class="form-container">
-        <h2>Add New Vehicle</h2>
-        <form th:action="@{/vehicles/save}" th:object="${vehicle}" method="post">
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-            <label for="model">Vehicle Model:</label>
-            <input type="text" id="model" th:field="*{model}"
-                   placeholder="e.g., Toyota Prius" required>
+<main class="rs-main student-shell">
+    <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
 
-            <label for="plateNumber">License Plate Number:</label>
-            <input type="text" id="plateNumber" th:field="*{plateNumber}"
-                   placeholder="e.g., ABC-1234" required>
-
-            <label for="type">Transmission / Fuel Type:</label>
-            <input type="text" id="type" th:field="*{type}"
-                   placeholder="e.g., Automatic Petrol" required>
-
-            <button type="submit">Save Vehicle</button>
-        </form>
+    <div class="rs-page-nav">
+        <span class="nav-brand">New vehicle</span>
+        <div class="nav-links">
+            <a th:href="@{/vehicles}">Back to fleet</a>
+        </div>
     </div>
-</div>
+
+    <div class="form-wrapper">
+        <div class="form-container rs-form-wide">
+            <h2>Add vehicle</h2>
+            <form th:action="@{/vehicles/save}" th:object="${vehicle}" method="post">
+                <label for="model">Model</label>
+                <input type="text" id="model" th:field="*{model}" placeholder="e.g. Toyota Prius" required>
+
+                <label for="plateNumber">Plate number</label>
+                <input type="text" id="plateNumber" th:field="*{plateNumber}" placeholder="e.g. ABC-1234" required>
+
+                <label for="type">Transmission / fuel</label>
+                <input type="text" id="type" th:field="*{type}" placeholder="e.g. Automatic petrol" required>
+
+                <button type="submit">Save vehicle</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

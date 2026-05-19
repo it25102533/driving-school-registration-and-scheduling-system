@@ -1,35 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
-    <title>Edit Vehicle</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Edit Vehicle — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-    <span class="nav-brand">RoadSync Fleet</span>
-    <a th:href="@{/vehicles}" class="nav-right">Cancel Edit</a>
-</nav>
+<body class="rs-landing">
 
-<div class="form-wrapper">
-    <div class="form-container">
-        <h2>Edit Vehicle Information</h2>
-        <form th:action="@{/vehicles/update}" th:object="${vehicle}" method="post">
-            <input type="hidden" th:field="*{id}">
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-            <label for="model">Vehicle Model:</label>
-            <input type="text" id="model" th:field="*{model}" required>
+<main class="rs-main student-shell">
+    <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
 
-            <label for="plateNumber">License Plate Number:</label>
-            <input type="text" id="plateNumber" th:field="*{plateNumber}" required>
-
-            <label for="type">Transmission / Fuel Type:</label>
-            <input type="text" id="type" th:field="*{type}" required>
-
-            <button type="submit">Update Vehicle</button>
-        </form>
+    <div class="rs-page-nav">
+        <span class="nav-brand">Edit vehicle</span>
+        <div class="nav-links">
+            <a th:href="@{/vehicles}">Cancel</a>
+        </div>
     </div>
-</div>
+
+    <div class="form-wrapper">
+        <div class="form-container rs-form-wide">
+            <h2>Vehicle details</h2>
+            <form th:action="@{/vehicles/update}" th:object="${vehicle}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <label for="model">Model</label>
+                <input type="text" id="model" th:field="*{model}" required>
+
+                <label for="plateNumber">Plate number</label>
+                <input type="text" id="plateNumber" th:field="*{plateNumber}" required>
+
+                <label for="type">Transmission / fuel</label>
+                <input type="text" id="type" th:field="*{type}" required>
+
+                <button type="submit">Update vehicle</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

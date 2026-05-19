@@ -48,17 +48,6 @@ public class StudentController {
         return T + "progress"; 
     }
 
-    @GetMapping("/student/feedback")
-    public String showFeedback(HttpSession session, Model model) {
-        Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
-        if (loggedInStudent == null) {
-            return "redirect:/login";
-        }
-        
-        model.addAttribute("notes", progressService.getNotesForStudent(loggedInStudent.getId()));
-        return T + "feedback";
-    }
-
     // FIXED: Changed endpoint to /signup to mirror roadsync.html fragments and login templates exactly
     @GetMapping("/signup")
     public String showForm(Model model) {

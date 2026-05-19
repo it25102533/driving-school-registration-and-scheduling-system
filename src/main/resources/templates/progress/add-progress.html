@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
-    <title>Log Student Progress</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Log Progress — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
-<body>
-<nav>
-    <span class="nav-brand">RoadSync Progress</span>
-    <a th:href="@{/instructor/dashboard}" class="nav-right">Back to Dashboard</a>
-</nav>
+<body class="rs-landing">
 
-<div class="form-wrapper">
-    <div class="form-container">
-        <h2>Log Lesson Progress</h2>
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-        <form th:action="@{/progress/save}" th:object="${progressNote}" method="post">
+<main class="rs-main student-shell">
+    <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
 
-            <label for="studentId">Select Student:</label>
-            <select id="studentId" th:field="*{studentId}" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc;">
-                <option value="" disabled selected>-- Choose a Student --</option>
-                <option th:each="s : ${students}" th:value="${s.id}" th:text="${s.name}"></option>
-            </select>
-
-            <label for="lessonTopic">Lesson Topic:</label>
-            <input type="text" id="lessonTopic" th:field="*{lessonTopic}" placeholder="e.g., Parallel Parking" required>
-
-            <label for="instructorNote">Instructor Notes:</label>
-            <textarea id="instructorNote" th:field="*{instructorNote}" rows="4" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" placeholder="How did the student do?" required></textarea>
-
-            <button type="submit">Save Progress Note</button>
-        </form>
+    <div class="rs-page-nav">
+        <span class="nav-brand">Progress</span>
+        <div class="nav-links">
+            <a th:href="@{/instructor/dashboard}">Staff dashboard</a>
+            <a th:href="@{/students}">Students</a>
+        </div>
     </div>
-</div>
+
+    <div class="form-wrapper">
+        <div class="form-container rs-form-wide">
+            <h2>Log lesson progress</h2>
+
+            <form th:action="@{/progress/save}" th:object="${progressNote}" method="post">
+                <label for="studentId">Student</label>
+                <select id="studentId" th:field="*{studentId}" required>
+                    <option value="" disabled selected>— Choose a student —</option>
+                    <option th:each="s : ${students}" th:value="${s.id}" th:text="${s.name}"></option>
+                </select>
+
+                <label for="lessonTopic">Lesson topic</label>
+                <input type="text" id="lessonTopic" th:field="*{lessonTopic}" placeholder="e.g. Parallel parking" required>
+
+                <label for="instructorNote">Instructor notes</label>
+                <textarea id="instructorNote" th:field="*{instructorNote}" rows="4" placeholder="How did the student do?" required></textarea>
+
+                <button type="submit">Save progress note</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

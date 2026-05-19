@@ -1,61 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/subsystem.css}">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Students — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
     <script th:src="@{/script.js}" defer></script>
-    <title>Student List | RoadSync Admin</title>
 </head>
-<body>
-<nav>
-    <div class="nav-brand">RoadSync Admin</div>
-    <div class="nav-links">
-        <a th:href="@{/register}">Register</a>
-        <a th:href="@{/students}">Students</a>
-        <a th:href="@{/logout}" class="btn-logout">Logout</a>
-    </div>
-</nav>
+<body class="rs-landing">
 
-<div class="table-container">
-    <h2>Driving School Students</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>License Type</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${allStudents == null or allStudents.isEmpty()}">
-            <td colspan="8" style="text-align: center; color: #888;">No students found in the system.</td>
-        </tr>
-        <tr th:each="s : ${allStudents}">
-            <td th:text="${s.id}"></td>
-            <td th:text="${s.name}"></td>
-            <td th:text="${s.email}"></td>
-            <td th:text="${s.age}"></td>
-            <td th:text="${s.licenseType}"></td>
-            <td th:text="${s.phone}"></td>
-            <td th:text="${s.address}"></td>
-            <td>
-                <a th:href="@{/editStudent(id=${s.id})}" class="edit-btn">Edit</a>
-                <a th:href="@{/deleteStudent(id=${s.id})}" class="delete-btn"
-                   onclick="return confirm('Are you sure you want to delete this student record?');">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <a th:href="@{/register}" style="text-decoration: none; color: #007bff; font-weight: bold;">+ Register New Student</a>
+<main class="rs-main student-shell">
+    <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
+
+    <div class="student-hero">
+        <h1>Student <span style="color: var(--rs-teal);">directory</span></h1>
+        <p>Manage learner accounts and contact details.</p>
     </div>
-</div>
+
+    <div class="table-container">
+        <h2>All students</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>License</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${allStudents == null or allStudents.isEmpty()}">
+                <td colspan="8" style="text-align: center; color: var(--rs-muted);">No students found.</td>
+            </tr>
+            <tr th:each="s : ${allStudents}">
+                <td th:text="${s.id}"></td>
+                <td th:text="${s.name}"></td>
+                <td th:text="${s.email}"></td>
+                <td th:text="${s.age}"></td>
+                <td th:text="${s.licenseType}"></td>
+                <td th:text="${s.phone}"></td>
+                <td th:text="${s.address}"></td>
+                <td>
+                    <a th:href="@{/editStudent(id=${s.id})}" class="edit-btn">Edit</a>
+                    <a th:href="@{/deleteStudent(id=${s.id})}" class="delete-btn"
+                       onclick="return confirm('Delete this student record?');">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align: center;">
+            <a th:href="@{/signup}" class="rs-inline-link">+ Register new student (sign up)</a>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

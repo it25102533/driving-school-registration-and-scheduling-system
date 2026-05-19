@@ -3,73 +3,67 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
     <title>Submit Feedback — RoadSync</title>
     <link rel="stylesheet" th:href="@{/landing.css}"/>
     <link rel="stylesheet" th:href="@{/subsystem.css}"/>
     <style>
-        /* Merged Grid Layout supporting side-by-side or stacked flexible cards */
-        .feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-top: 2rem; }
-        .feedback-card { background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .feedback-card h3 { color: var(--rs-teal); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; }
-        .feedback-card label { font-weight: bold; color: var(--rs-text); display: block; margin-bottom: 0.5rem; font-size: 0.9rem; }
-        .feedback-card input, .feedback-card select, .feedback-card textarea { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border-radius: 6px; border: 1px solid var(--rs-border); background: var(--rs-bg); color: var(--rs-text); font-size: 1rem; box-sizing: border-box; }
-        .feedback-card input:focus, .feedback-card select:focus, .feedback-card textarea:focus { border-color: var(--rs-teal); outline: none; }
-        .success-alert { background: rgba(20, 184, 166, 0.1); color: var(--rs-teal); padding: 1rem; border-radius: 8px; border: 1px solid var(--rs-teal); text-align: center; margin-bottom: 2rem; font-weight: bold; }
+        .feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1rem; }
+        .feedback-card { background: var(--rs-card); border: 1px solid var(--rs-border); border-radius: 16px; padding: 2rem; }
+        .feedback-card h3 { color: var(--rs-accent); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.25rem; }
+        .feedback-card label { display: block; margin-top: 15px; color: var(--rs-muted); font-size: 0.9rem; font-weight: bold; }
+        .feedback-card input, .feedback-card select, .feedback-card textarea { width: 100%; padding: 0.75rem; margin-top: 0.5rem; border-radius: 8px; border: 1px solid var(--rs-border); background: rgba(0,0,0,0.2); color: var(--rs-text); box-sizing: border-box; }
+        .feedback-btn { width: 100%; padding: 0.85rem; margin-top: 1.5rem; background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: filter 0.2s; }
+        .feedback-btn:hover { filter: brightness(1.1); }
+        .success-alert { background: rgba(20, 184, 166, 0.1); color: var(--rs-teal); padding: 1rem; border-radius: 8px; border: 1px solid var(--rs-teal); text-align: center; margin-bottom: 2rem; }
     </style>
 </head>
 <body class="rs-landing">
 
 <header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-<main class="rs-main student-shell" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+<main class="rs-main student-shell">
 
     <div th:replace="~{fragments/student-nav :: nav('feedback')}"></div>
 
-    <div class="student-hero" style="margin-bottom: 2rem;">
-        <h1>Submit <span style="color: var(--rs-teal);">Feedback</span></h1>
-        <p>Let us know how your learning milestones are shaping up. Rate your instructors or review your curriculum modules.</p>
+    <div class="student-hero">
+        <h1>Submit <span style="color: var(--rs-teal);">feedback</span></h1>
+        <p>Rate instructors or training packages.</p>
     </div>
 
-    <div th:if="${param.sent}" class="success-alert">
-        🎉 Thank you! Your review records have been logged securely.
-    </div>
-
-    <div class="feedback-grid">
-        <div class="feedback-card">
-            <h3>Rate an Instructor</h3>
-            <form th:action="@{/student/feedback/instructor}" method="post">
-
-                <label for="instructorId">Select Instructor</label>
-                <select id="instructorId" name="instructorId" required>
-                    <option value="" disabled selected>-- Choose your instructor --</option>
-                    <option th:each="inst : ${instructors}" th:value="${inst.id}" th:text="${inst.name}"></option>
-                </select>
-
-                <label for="instRating">Rating (1 to 5)</label>
-                <input id="instRating" type="number" name="rating" min="1" max="5" value="5" required>
-
-                <label for="instComments">Your Comments</label>
-                <textarea id="instComments" name="comments" rows="4" required placeholder="How was your driving experience?"></textarea>
-
-                <button type="submit" class="rs-btn rs-btn-primary">Submit Instructor Feedback</button>
-            </form>
+    <div>
+        <div th:if="${param.sent}" class="success-alert">
+            Thank you! Your feedback has been submitted successfully.
         </div>
 
-        <div class="feedback-card">
-            <h3>Rate a Course/Package</h3>
-            <form th:action="@{/student/feedback/course}" method="post">
-
-                <label for="courseName">Training Package Name</label>
-                <input id="courseName" type="text" name="courseName" placeholder="e.g., Beginners Package, VIP Bundle" required>
-
-                <label for="courseRating">Rating (1 to 5)</label>
-                <input id="courseRating" type="number" name="rating" min="1" max="5" value="5" required>
-
-                <label for="courseComments">Curriculum Comments</label>
-                <textarea id="courseComments" name="comments" rows="4" required placeholder="What did you think of the driving manual lessons?"></textarea>
-
-                <button type="submit" class="rs-btn rs-btn-primary">Submit Course Feedback</button>
-            </form>
+        <div class="feedback-grid">
+            <div class="feedback-card">
+                <h3>Rate an instructor</h3>
+                <form th:action="@{/student/feedback/instructor}" method="post">
+                    <label for="instructorId">Instructor</label>
+                    <select id="instructorId" name="instructorId" required>
+                        <option value="" disabled selected th:if="${#lists.isEmpty(instructors)}">No instructors available</option>
+                        <option th:unless="${#lists.isEmpty(instructors)}" th:each="inst : ${instructors}" th:value="${inst.id}" th:text="${inst.name}"></option>
+                    </select>
+                    <label for="instRating">Rating (1–5)</label>
+                    <input id="instRating" type="number" name="rating" min="1" max="5" value="5" required>
+                    <label for="instComments">Comments</label>
+                    <textarea id="instComments" name="comments" rows="3" placeholder="How was the lesson?"></textarea>
+                    <button type="submit" class="feedback-btn">Submit instructor feedback</button>
+                </form>
+            </div>
+            <div class="feedback-card">
+                <h3>Rate a course or package</h3>
+                <form th:action="@{/student/feedback/course}" method="post">
+                    <label for="courseName">Course name</label>
+                    <input id="courseName" type="text" name="courseName" placeholder="e.g. Beginners package" required>
+                    <label for="courseRating">Rating (1–5)</label>
+                    <input id="courseRating" type="number" name="rating" min="1" max="5" value="5" required>
+                    <label for="courseComments">Comments</label>
+                    <textarea id="courseComments" name="comments" rows="3" placeholder="Thoughts on the curriculum?"></textarea>
+                    <button type="submit" class="feedback-btn">Submit course feedback</button>
+                </form>
+            </div>
         </div>
     </div>
 </main>
