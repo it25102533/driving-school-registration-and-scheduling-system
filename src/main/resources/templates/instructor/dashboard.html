@@ -15,7 +15,9 @@
 <main class="rs-main student-shell">
     <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
 
-    <div class="table-container" style="max-width: 720px;">
+    <p th:if="${param.feedbackDeleted}" class="success-msg" style="max-width: 1100px;">Feedback removed.</p>
+
+    <div class="table-container" style="max-width: 1100px; margin-bottom: 1.5rem;">
         <h2>Welcome, <span th:text="${instructor.name}">Instructor</span></h2>
         <p style="color: var(--rs-muted); margin-bottom: 1.5rem;">
             <span th:text="${instructor.specialization}">Specialization</span>
@@ -44,6 +46,78 @@
                 <button type="submit" class="delete-btn" style="width: auto; cursor: pointer;">Delete my professional account</button>
             </form>
         </div>
+    </div>
+
+    <div class="table-container" style="max-width: 1100px; margin-bottom: 1.5rem;">
+        <h2>Student feedback — <span style="color: var(--rs-teal);">instructors</span></h2>
+        <p style="color: var(--rs-muted); font-size: 0.9rem; margin: 0 0 1rem;">Reviews students submitted about driving instructors.</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Instructor</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fb : ${instructorFeedback}">
+                <td th:text="${fb.dateFormatted}"></td>
+                <td th:text="${fb.studentName}"></td>
+                <td th:text="${fb.instructorName}"></td>
+                <td th:text="|${fb.rating} / 5|"></td>
+                <td th:text="${fb.comments} ?: '—'"></td>
+                <td>
+                    <form th:action="@{/instructor/feedback/delete}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Delete this feedback?');">
+                        <input type="hidden" name="id" th:value="${fb.id}"/>
+                        <button type="submit" class="delete-btn" style="border:none; cursor:pointer;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(instructorFeedback)}">
+                <td colspan="6" style="text-align:center; color: var(--rs-muted);">No instructor feedback yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-container" style="max-width: 1100px;">
+        <h2>Student feedback — <span style="color: var(--rs-teal);">courses &amp; packages</span></h2>
+        <p style="color: var(--rs-muted); font-size: 0.9rem; margin: 0 0 1rem;">Reviews students submitted about training packages or courses.</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Course / package</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fb : ${courseFeedback}">
+                <td th:text="${fb.dateFormatted}"></td>
+                <td th:text="${fb.studentName}"></td>
+                <td th:text="${fb.courseName}"></td>
+                <td th:text="|${fb.rating} / 5|"></td>
+                <td th:text="${fb.comments} ?: '—'"></td>
+                <td>
+                    <form th:action="@{/instructor/feedback/delete}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Delete this feedback?');">
+                        <input type="hidden" name="id" th:value="${fb.id}"/>
+                        <button type="submit" class="delete-btn" style="border:none; cursor:pointer;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(courseFeedback)}">
+                <td colspan="6" style="text-align:center; color: var(--rs-muted);">No course feedback yet.</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </main>
 
