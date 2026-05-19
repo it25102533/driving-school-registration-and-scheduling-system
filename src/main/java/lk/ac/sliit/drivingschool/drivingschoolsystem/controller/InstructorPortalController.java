@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -36,6 +37,21 @@ public class InstructorPortalController {
         Instructor loggedIn = getLoggedInInstructor(session);
         model.addAttribute("lessons", lessonService.getInstructorLessons(loggedIn.getId()));
         return T + "my-lessons";
+    }
+
+    /**
+     * Deletes the currently logged-in instructor account (and their lesson rows), then signs out.
+     */
+    @PostMapping("/account/delete")
+    public String deleteOwnAccount(HttpSession session) {
+        Instructor loggedIn = getLoggedInInstructor(session);
+        if (loggedIn == null || loggedIn.getId() == null) {
+            return "redirect:/login/professional";
+        }
+        instructorService.deleteInstructor(loggedIn.getId());
+        session.removeAttribute(ProfessionalAuthController.SESSION_INSTRUCTOR);
+        session.invalidate();
+        return "redirect:/login/professional?accountDeleted";
     }
 
     private Instructor getLoggedInInstructor(HttpSession session) {

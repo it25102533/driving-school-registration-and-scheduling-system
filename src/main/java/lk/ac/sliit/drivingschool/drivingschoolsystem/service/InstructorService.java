@@ -4,8 +4,10 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.InstructorDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.InstructorLoginDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +18,14 @@ public class InstructorService {
 
     private final InstructorRepository instructorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LessonRepository lessonRepository;
 
-    public InstructorService(InstructorRepository instructorRepository, PasswordEncoder passwordEncoder) {
+    public InstructorService(InstructorRepository instructorRepository,
+                             PasswordEncoder passwordEncoder,
+                             LessonRepository lessonRepository) {
         this.instructorRepository = instructorRepository;
         this.passwordEncoder = passwordEncoder;
+        this.lessonRepository = lessonRepository;
     }
 
     public void addInstructor(InstructorDto dto) {
@@ -43,7 +49,9 @@ public class InstructorService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteInstructor(Long id) {
+        lessonRepository.deleteByInstructor_Id(id);
         instructorRepository.deleteById(id);
     }
 

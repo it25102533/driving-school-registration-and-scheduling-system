@@ -30,6 +30,7 @@
 
         <p th:if="${requiredLogin}" class="error">Please sign in to continue.</p>
         <p th:if="${param.logout}" class="success">You have been signed out.</p>
+        <p th:if="${param.accountDeleted}" class="success">Your professional account has been deleted.</p>
 
         <form th:action="@{/login/professional}" method="post">
             <p th:if="${error}" class="error" th:text="${error}"></p>
@@ -39,6 +40,9 @@
         </form>
 
         <p style="text-align:center; margin-top:1.5rem; font-size:0.85rem;">
+            <a th:href="@{/instructors/add}" style="color:var(--rs-teal); text-decoration: none; font-weight: 600;">New instructor? Create staff account</a>
+        </p>
+        <p style="text-align:center; margin-top:0.65rem; font-size:0.85rem;">
             <a th:href="@{/login}" style="color:var(--rs-accent); text-decoration: none;">Student login</a>
         </p>
     </div>

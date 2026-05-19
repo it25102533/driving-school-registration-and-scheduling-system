@@ -11,4 +11,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     // Derived query methods to fetch schedules cleanly
     List<Lesson> findByStudent_Id(Long studentId);
     List<Lesson> findByInstructor_Id(Long instructorId);
+
+    void deleteByInstructor_Id(Long instructorId);
 }
