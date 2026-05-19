@@ -9,11 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // Handles your default constructor block automatically
 public class StudentFeedbackDto {
 
+    private Long id;
     private Long instructorId; // Used when rating an instructor
+    private String courseName;  // Used when rating a course/package
+    private int rating;
+    private String comments;
 
-    private String courseName;  // NEW: Used when rating a course/package
-
-    private int rating;         // 1 to 5 stars bound to both forms
-
-    private String comments;    // Optional feedback notes bound to both forms
+    // Display fields for staff dashboard
+    private String studentName;
+    private String instructorName;
+    private String dateFormatted;
+    private String feedbackType; // INSTRUCTOR or COURSE
 }
