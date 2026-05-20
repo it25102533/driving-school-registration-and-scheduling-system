@@ -22,4 +22,6 @@ public interface StudentFeedbackRepository extends JpaRepository<StudentFeedback
     List<StudentFeedback> findByInstructorIsNullOrderBySubmissionDateDesc();
 
     List<StudentFeedback> findByInstructorIsNotNullOrderBySubmissionDateDesc();
+
+    void deleteByStudent_Id(Long studentId);
 }

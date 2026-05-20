@@ -25,6 +25,7 @@
     <section class="student-profile-card">
         <h2>Account details</h2>
         <p class="profile-hint">Student ID: <span th:text="${student.id}" style="color: var(--rs-accent); font-weight: 600;">—</span></p>
+        <p class="profile-hint">License goal: <span th:text="${student.licenseDisplay}" style="color: var(--rs-teal); font-weight: 600;">—</span></p>
 
         <p th:if="${param.success}" class="profile-success">Your profile has been updated.</p>
         <p th:if="${error}" class="profile-error" th:text="${error}"></p>
@@ -49,8 +50,11 @@
                 </section>
             </section>
 
-            <label for="licenseType">License type</label>
-            <input type="text" id="licenseType" th:field="*{licenseType}" placeholder="e.g. B, B1" required/>
+            <label for="licenseType">License type goal</label>
+            <select id="licenseType" th:field="*{licenseType}" required>
+                <option value="">— Select your license goal —</option>
+                <th:block th:replace="~{fragments/license-options :: licenseOptions}"></th:block>
+            </select>
 
             <label for="address">Address</label>
             <input type="text" id="address" th:field="*{address}" autocomplete="street-address"/>

@@ -24,6 +24,10 @@
 
     <div class="table-container">
         <h2>Report: <span th:text="${student.name}" style="color: var(--rs-accent);">Student</span></h2>
+        <p style="color: var(--rs-muted); margin: 0 0 1rem;">
+            License goal:
+            <span th:text="${student.licenseDisplay}" style="color: var(--rs-teal); font-weight: 600;">—</span>
+        </p>
 
         <p th:if="${param.saved}" class="success-msg">Progress note saved.</p>
         <p th:if="${param.deleted}" class="success-msg">Progress note deleted.</p>

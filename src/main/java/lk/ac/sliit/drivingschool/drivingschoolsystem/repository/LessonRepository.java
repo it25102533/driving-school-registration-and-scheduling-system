@@ -13,4 +13,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByInstructor_Id(Long instructorId);
 
     void deleteByInstructor_Id(Long instructorId);
+
+    void deleteByStudent_Id(Long studentId);
 }

@@ -85,19 +85,7 @@
             </div>
             <select id="licenseType" class="license-select" th:field="*{licenseType}" required>
                 <option value="" disabled selected>— Select your license goal —</option>
-                <option value="A1|Light motorcycles up to 100cc">A1 | Light motorcycles up to 100cc</option>
-                <option value="A|Motorcycles above 100cc">A | Motorcycles above 100cc</option>
-                <option value="B1|Three-wheelers / tuk-tuks / light tricycles">B1 | Three-wheelers / tuk-tuks / light tricycles</option>
-                <option value="B|Cars, vans, dual-purpose vehicles up to 3500kg">B | Cars, vans, dual-purpose vehicles up to 3500kg</option>
-                <option value="C1|Light lorries (medium trucks)">C1 | Light lorries (medium trucks)</option>
-                <option value="C|Heavy lorries/trucks">C | Heavy lorries/trucks</option>
-                <option value="CE|Heavy lorry with trailer">CE | Heavy lorry with trailer</option>
-                <option value="D1|Light buses/coaches">D1 | Light buses/coaches</option>
-                <option value="D|Heavy buses/coaches">D | Heavy buses/coaches</option>
-                <option value="DE|Heavy bus with trailer">DE | Heavy bus with trailer</option>
-                <option value="G1|Two-wheel hand tractors">G1 | Two-wheel hand tractors</option>
-                <option value="G|Agricultural vehicles/tractors">G | Agricultural vehicles/tractors</option>
-                <option value="J|Construction/special-purpose vehicles (loaders, excavators, etc.)">J | Construction/special-purpose vehicles (loaders, excavators, etc.)</option>
+                <th:block th:replace="~{fragments/license-options :: licenseOptions}"></th:block>
             </select>
 
             <label for="address">Home Address</label>

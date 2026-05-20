@@ -23,6 +23,9 @@
 
     <div class="table-container">
         <h2>All students</h2>
+        <p th:if="${param.deleted}" class="success-msg">Student removed from the directory.</p>
+        <p th:if="${param.error != null and param.error[0] == 'delete'}" class="profile-error">Could not delete this student. Please try again.</p>
+
         <table>
             <thead>
             <tr>
@@ -30,7 +33,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Age</th>
-                <th>License</th>
+                <th>License type</th>
+                <th>Vehicle category</th>
                 <th>Phone</th>
                 <th>Address</th>
                 <th>Action</th>
@@ -38,14 +42,15 @@
             </thead>
             <tbody>
             <tr th:if="${allStudents == null or allStudents.isEmpty()}">
-                <td colspan="8" style="text-align: center; color: var(--rs-muted);">No students found.</td>
+                <td colspan="9" style="text-align: center; color: var(--rs-muted);">No students found.</td>
             </tr>
             <tr th:each="s : ${allStudents}">
                 <td th:text="${s.id}"></td>
                 <td th:text="${s.name}"></td>
                 <td th:text="${s.email}"></td>
                 <td th:text="${s.age}"></td>
-                <td th:text="${s.licenseType}"></td>
+                <td th:text="${s.licenseCode != null ? s.licenseCode : '—'}"></td>
+                <td th:text="${s.licenseCategory != null and !s.licenseCategory.isEmpty() ? s.licenseCategory : (s.licenseType != null ? s.licenseType : '—')}"></td>
                 <td th:text="${s.phone}"></td>
                 <td th:text="${s.address}"></td>
                 <td>

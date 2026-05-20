@@ -3,7 +3,7 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.controller;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.controller.ProfessionalAuthController;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.ProgressNoteDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.ProgressService;
-import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +15,17 @@ public class ProgressController {
 
     private static final String T = "progress/";
     private final ProgressService progressService;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
-    public ProgressController(ProgressService progressService, StudentRepository studentRepository) {
+    public ProgressController(ProgressService progressService, StudentService studentService) {
         this.progressService = progressService;
-        this.studentRepository = studentRepository;
+        this.studentService = studentService;
     }
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
         // Fetches all student profiles so the instructor can assign a progress milestone note
-        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("students", studentService.getAllStudents());
         model.addAttribute("progressNote", new ProgressNoteDto());
         return T + "add-progress";
     }
@@ -48,7 +48,7 @@ public class ProgressController {
     @GetMapping("/report/{studentId}")
     public String viewReport(@PathVariable Long studentId, Model model) {
         model.addAttribute("notes", progressService.getNotesForStudent(studentId));
-        model.addAttribute("student", studentRepository.findById(studentId).orElseThrow());
+        model.addAttribute("student", studentService.getStudentById(studentId));
         return T + "student-report";
     }
 }
