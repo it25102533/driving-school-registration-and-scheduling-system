@@ -90,21 +90,23 @@ public class StudentController {
         return "login";
     }
 
-    // NEW: Handles the legacy form processing action we added to the login.html toggle accordion details block
     @PostMapping("/login/legacy")
     public String processLegacyLogin(@RequestParam String name, @RequestParam Long studentId, HttpSession session, Model model) {
-        // Fallback placeholder logic pulling identity records directly from persistence layer
-        StudentDto studentDto = studentService.getStudentById(studentId);
-        if (studentDto != null && studentDto.getName().equalsIgnoreCase(name)) {
-            // Fetch raw domain wrapper or reconstruct domain entity session properties
-            Student studentEntity = new Student();
-            studentEntity.setId(studentDto.getId());
-            studentEntity.setName(studentDto.getName());
+        try {
+            StudentDto studentDto = studentService.getStudentById(studentId);
+            if (studentDto != null && studentDto.getName().equalsIgnoreCase(name)) {
+                Student studentEntity = new Student();
+                studentEntity.setId(studentDto.getId());
+                studentEntity.setName(studentDto.getName());
 
-            session.setAttribute("SESSION_STUDENT", studentEntity);
-            return "redirect:/student/dashboard";
+                session.setAttribute("SESSION_STUDENT", studentEntity);
+                return "redirect:/student/dashboard";
+            }
+        } catch (IllegalArgumentException e) {
+            // ID not found, fall through to error message below
         }
-        model.addAttribute("error", "Legacy user record match failed.");
+        
+        model.addAttribute("error", "Legacy user record match failed. Invalid ID or Name.");
         return "login";
     }
 
