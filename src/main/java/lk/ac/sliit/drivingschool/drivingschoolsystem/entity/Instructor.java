@@ -2,6 +2,7 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.entity;
 
 // Updated to point directly to your actual shared Person entity location
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Person;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.LessonPackage;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,4 +29,8 @@ public class Instructor extends Person {
 
     @Column(length = 120)
     private String passwordHash;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "package_id")
+    private LessonPackage assignedPackage;
 }

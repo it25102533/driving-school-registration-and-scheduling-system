@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#0c1222"/>
+    <title>Checkout — RoadSync</title>
+    <link rel="stylesheet" th:href="@{/landing.css}"/>
+    <link rel="stylesheet" th:href="@{/subsystem.css}"/>
+    <style>
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+            align-items: start;
+        }
+
+        .order-summary, .payment-form {
+            background: var(--rs-surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-summary h2, .payment-form h2 {
+            margin-top: 0;
+            color: var(--rs-text);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: var(--rs-muted);
+        }
+        
+        .summary-item.total {
+            color: var(--rs-text);
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .rs-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .rs-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--rs-muted);
+            font-size: 0.9rem;
+        }
+
+        .rs-input-group input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--rs-text);
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .rs-input-group input:focus {
+            outline: none;
+            border-color: var(--rs-primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 30px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1a1f2e;
+            font-size: 0.8rem;
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: var(--rs-primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-pay:hover {
+            background: var(--rs-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="rs-landing">
+
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
+
+<main class="rs-main student-shell">
+    <div th:replace="~{fragments/student-nav :: nav('packages')}"></div>
+
+    <div class="student-hero" style="padding: 2rem 0;">
+        <h1>Secure <span style="color: var(--rs-teal);">Checkout</span></h1>
+        <p>Complete your purchase securely via our payment gateway.</p>
+    </div>
+
+    <div class="checkout-container">
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="summary-item">
+                <span>Package</span>
+                <strong th:text="${packageDetails.packageName}" style="color: var(--rs-text);">Package Name</strong>
+            </div>
+            <div class="summary-item">
+                <span>Base Price</span>
+                <span>LKR <span th:text="${#numbers.formatDecimal(packageDetails.basePrice, 0, 'COMMA', 0, 'POINT')}">0</span></span>
+            </div>
+            <div class="summary-item" style="color: var(--rs-primary);">
+                <span>Discount Applied</span>
+                <span>- LKR <span th:text="${#numbers.formatDecimal(packageDetails.basePrice - finalPrice, 0, 'COMMA', 0, 'POINT')}">0</span></span>
+            </div>
+            <div class="summary-item total">
+                <span>Total to Pay</span>
+                <span>LKR <span th:text="${#numbers.formatDecimal(finalPrice, 0, 'COMMA', 0, 'POINT')}">0</span></span>
+            </div>
+        </div>
+
+        <!-- Fake Payment Form -->
+        <div class="payment-form">
+            <h2>Payment Details</h2>
+
+            <form th:action="@{/student/buy-package}" method="post">
+                <input type="hidden" name="packageId" th:value="${packageDetails.id}">
+                
+                <div class="rs-input-group" style="margin-bottom: 1.5rem;">
+                    <label>Select Card Type</label>
+                    <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--rs-text); font-size: 1rem; cursor: pointer;">
+                            <input type="radio" name="cardType" value="VISA" checked style="width: auto;">
+                            <div class="card-icon" style="background: #1a1f36; color: white; display: inline-flex; margin-bottom: 0;">VISA</div>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--rs-text); font-size: 1rem; cursor: pointer;">
+                            <input type="radio" name="cardType" value="MASTERCARD" style="width: auto;">
+                            <div class="card-icon" style="background: #eb001b; color: white; display: inline-flex; margin-bottom: 0;">MC</div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="rs-input-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" id="cardName" name="cardName" placeholder="e.g. John Doe" required>
+                </div>
+
+                <div class="rs-input-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" name="cardNumber" placeholder="0000 0000 0000 0000" pattern="\d{16}" title="16 digit card number" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="rs-input-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" pattern="\d{2}/\d{2}" title="Format: MM/YY" required>
+                    </div>
+                    <div class="rs-input-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="123" pattern="\d{3,4}" title="3 or 4 digit CVV" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-pay">
+                    Pay LKR <span th:text="${#numbers.formatDecimal(finalPrice, 0, 'COMMA', 0, 'POINT')}">0</span>
+                </button>
+            </form>
+            <p style="text-align: center; color: var(--rs-muted); font-size: 0.8rem; margin-top: 1rem;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Payments are securely processed. This is a testing environment.
+            </p>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
+</body>
+</html>

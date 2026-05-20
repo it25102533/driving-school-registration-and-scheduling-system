@@ -44,6 +44,12 @@
                 <label for="email">Work email (login)</label>
                 <input type="email" id="email" th:field="*{email}" required>
 
+                <label for="assignedPackageId">Assigned Package</label>
+                <select id="assignedPackageId" th:field="*{assignedPackageId}">
+                    <option value="">-- No Package Assigned --</option>
+                    <option th:each="pkg : ${packages}" th:value="${pkg.id}" th:text="${pkg.packageName}"></option>
+                </select>
+
                 <label for="password">New password</label>
                 <input type="password" id="password" th:field="*{password}" placeholder="Leave blank to keep current">
 

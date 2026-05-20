@@ -33,6 +33,7 @@
                 <th>Date</th>
                 <th>Package</th>
                 <th>Total paid</th>
+                <th>Invoice</th>
             </tr>
             </thead>
             <tbody>
@@ -40,9 +41,14 @@
                 <td th:text="${pay.formattedDate}"></td>
                 <td th:text="${pay.packageName}"></td>
                 <td class="rs-status-ok">LKR <span th:text="${#numbers.formatDecimal(pay.amountPaid, 0, 'COMMA', 0, 'POINT')}">0</span></td>
+                <td>
+                    <a th:href="@{/student/invoice/{id}(id=${pay.id})}" class="rs-inline-link" target="_blank" title="Download PDF Invoice">
+                        Download
+                    </a>
+                </td>
             </tr>
             <tr th:if="${#lists.isEmpty(history)}">
-                <td colspan="3" style="text-align: center; color: var(--rs-muted);">No purchases yet.</td>
+                <td colspan="4" style="text-align: center; color: var(--rs-muted);">No purchases yet.</td>
             </tr>
             </tbody>
         </table>

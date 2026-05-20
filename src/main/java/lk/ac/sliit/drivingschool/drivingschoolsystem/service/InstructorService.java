@@ -5,6 +5,7 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.InstructorLoginDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.PackageRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,16 @@ public class InstructorService {
     private final InstructorRepository instructorRepository;
     private final PasswordEncoder passwordEncoder;
     private final LessonRepository lessonRepository;
+    private final PackageRepository packageRepository;
 
     public InstructorService(InstructorRepository instructorRepository,
                              PasswordEncoder passwordEncoder,
-                             LessonRepository lessonRepository) {
+                             LessonRepository lessonRepository,
+                             PackageRepository packageRepository) {
         this.instructorRepository = instructorRepository;
         this.passwordEncoder = passwordEncoder;
         this.lessonRepository = lessonRepository;
+        this.packageRepository = packageRepository;
     }
 
     public void addInstructor(InstructorDto dto) {
@@ -101,6 +105,12 @@ public class InstructorService {
         inst.setLicenseNumber(dto.getLicenseNumber());
         inst.setSpecialization(dto.getSpecialization());
         inst.setEmail(dto.getEmail());
+        
+        if (dto.getAssignedPackageId() != null) {
+            inst.setAssignedPackage(packageRepository.findById(dto.getAssignedPackageId()).orElse(null));
+        } else {
+            inst.setAssignedPackage(null);
+        }
     }
 
     private InstructorDto mapEntityToDto(Instructor inst) {
@@ -111,6 +121,9 @@ public class InstructorService {
         dto.setLicenseNumber(inst.getLicenseNumber());
         dto.setSpecialization(inst.getSpecialization());
         dto.setEmail(inst.getEmail());
+        if (inst.getAssignedPackage() != null) {
+            dto.setAssignedPackageId(inst.getAssignedPackage().getId());
+        }
         return dto;
     }
 }

@@ -6,7 +6,11 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Payment;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.PackageRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.PaymentRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Lesson;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,18 +24,33 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PackageRepository packageRepository;
     private final StudentRepository studentRepository;
+    private final InstructorRepository instructorRepository;
+    private final LessonRepository lessonRepository;
 
-    public PaymentService(PaymentRepository paymentRepository, PackageRepository packageRepository, StudentRepository studentRepository) {
+    public PaymentService(PaymentRepository paymentRepository, 
+                          PackageRepository packageRepository, 
+                          StudentRepository studentRepository,
+                          InstructorRepository instructorRepository,
+                          LessonRepository lessonRepository) {
         this.paymentRepository = paymentRepository;
         this.packageRepository = packageRepository;
         this.studentRepository = studentRepository;
+        this.instructorRepository = instructorRepository;
+        this.lessonRepository = lessonRepository;
     }
 
     public LessonPackage getPackageById(Long packageId) {
         return packageRepository.findById(packageId).orElseThrow();
     }
 
-    public void processPayment(PaymentDto dto) {
+    public double calculateFinalPrice(Long studentId, Long packageId) {
+        Student student = studentRepository.findById(studentId).orElseThrow();
+        LessonPackage lessonPackage = packageRepository.findById(packageId).orElseThrow();
+        double discount = student.calculateDiscount(lessonPackage.getBasePrice());
+        return lessonPackage.getBasePrice() - discount;
+    }
+
+    public Long processPayment(PaymentDto dto) {
         Student student = studentRepository.findById(dto.getStudentId()).orElseThrow();
         LessonPackage lessonPackage = packageRepository.findById(dto.getPackageId()).orElseThrow();
 
@@ -45,7 +64,31 @@ public class PaymentService {
         payment.setAmountPaid(finalPrice);
         payment.setPaymentDate(LocalDateTime.now());
 
-        paymentRepository.save(payment);
+        Payment savedPayment = paymentRepository.save(payment);
+
+        // Auto-generate lessons based on package
+        List<Instructor> availableInstructors = instructorRepository.findByAssignedPackage_Id(lessonPackage.getId());
+        Instructor assignedInstructor = null;
+        if (!availableInstructors.isEmpty()) {
+            assignedInstructor = availableInstructors.get(0); // Pick first available one
+        }
+
+        if (assignedInstructor != null) {
+            for(int i = 0; i < lessonPackage.getNumberOfLessons(); i++) {
+                Lesson lesson = new Lesson();
+                lesson.setStudent(student);
+                lesson.setInstructor(assignedInstructor);
+                lesson.setStatus("Pending");
+                lessonRepository.save(lesson);
+            }
+        }
+
+        return savedPayment.getId();
+    }
+
+    public Payment getPaymentByIdAndStudent(Long paymentId, Long studentId) {
+        return paymentRepository.findByIdAndStudent_Id(paymentId, studentId)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
     }
 
     public List<PaymentDto> getStudentPaymentHistory(Long studentId) {
