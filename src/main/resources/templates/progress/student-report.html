@@ -25,12 +25,16 @@
     <div class="table-container">
         <h2>Report: <span th:text="${student.name}" style="color: var(--rs-accent);">Student</span></h2>
 
+        <p th:if="${param.saved}" class="success-msg">Progress note saved.</p>
+        <p th:if="${param.deleted}" class="success-msg">Progress note deleted.</p>
+
         <table>
             <thead>
             <tr>
                 <th>Date &amp; time</th>
                 <th>Lesson topic</th>
                 <th>Instructor notes</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -38,9 +42,17 @@
                 <td th:text="${note.dateFormatted}" style="font-weight: 600;"></td>
                 <td th:text="${note.lessonTopic}"></td>
                 <td th:text="${note.instructorNote}"></td>
+                <td>
+                    <form th:action="@{/progress/delete}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Delete this progress note?');">
+                        <input type="hidden" name="id" th:value="${note.id}"/>
+                        <input type="hidden" name="studentId" th:value="${student.id}"/>
+                        <button type="submit" class="delete-btn" style="border:none; cursor:pointer;">Delete</button>
+                    </form>
+                </td>
             </tr>
             <tr th:if="${#lists.isEmpty(notes)}">
-                <td colspan="3" style="text-align: center; color: var(--rs-muted);">No progress notes yet.</td>
+                <td colspan="4" style="text-align: center; color: var(--rs-muted);">No progress notes yet.</td>
             </tr>
             </tbody>
         </table>

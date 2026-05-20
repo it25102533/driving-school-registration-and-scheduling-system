@@ -19,27 +19,29 @@
 
 <header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
-<main class="rs-main student-shell" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+<main class="rs-main student-shell">
 
     <div th:replace="~{fragments/student-nav :: nav('progress')}"></div>
 
-    <div style="flex: 1; padding: 0 1rem;">
-        <h2 style="color: #fff; margin-top: 0; margin-bottom: 2rem;">My Learning Progress</h2>
+    <div class="student-hero">
+        <h1>My <span style="color: var(--rs-teal);">progress</span></h1>
+        <p>Read instructor notes and skill development feedback from your lessons.</p>
+    </div>
 
-        <div th:if="${#lists.isEmpty(notes)}" style="color: var(--rs-muted); text-align: center; padding: 4rem 2rem; border: 1px dashed var(--rs-border); border-radius: 12px; background: rgba(255,255,255,0.01);">
-            No progress notes have been logged by your instructors yet. Check back after your first lesson!
-        </div>
+    <div th:if="${#lists.isEmpty(notes)}" style="color: var(--rs-muted); text-align: center; padding: 3rem 2rem; border: 1px dashed var(--rs-border); border-radius: 12px; background: rgba(255,255,255,0.01); max-width: 720px;">
+        No progress notes have been logged by your instructors yet. Check back after your first lesson!
+    </div>
 
-        <div th:unless="${#lists.isEmpty(notes)}" th:each="note : ${notes}" class="progress-card">
-            <div class="progress-date" th:text="${note.date != null ? #temporals.format(note.date, 'MMMM dd, yyyy - HH:mm') : 'Recent Lesson'}">Date</div>
-            <h3 class="progress-topic" th:text="${note.lessonTopic}">Lesson Topic</h3>
-            <p class="progress-note" th:text="${note.instructorNote}">Instructor's feedback goes here...</p>
+    <div th:unless="${#lists.isEmpty(notes)}">
+        <div th:each="note : ${notes}" class="progress-card">
+            <div class="progress-date" th:text="${note.dateFormatted != null ? note.dateFormatted : 'Recent lesson'}">Date</div>
+            <h3 class="progress-topic" th:text="${note.lessonTopic}">Lesson topic</h3>
+            <p class="progress-note" th:text="${note.instructorNote}">Instructor feedback</p>
         </div>
     </div>
 </main>
 
 <footer th:replace="~{fragments/roadsync :: footer}"></footer>
-
 <script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>

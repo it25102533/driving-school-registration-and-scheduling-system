@@ -1,6 +1,5 @@
 package lk.ac.sliit.drivingschool.drivingschoolsystem.controller;
 
-
 import lk.ac.sliit.drivingschool.drivingschoolsystem.controller.ProfessionalAuthController;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.ProgressNoteDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.ProgressService;
@@ -35,9 +34,15 @@ public class ProgressController {
     public String saveProgress(@ModelAttribute("progressNote") ProgressNoteDto dto, HttpSession session) {
         progressService.saveProgress(dto);
         if (session.getAttribute(ProfessionalAuthController.SESSION_INSTRUCTOR) != null) {
-            return "redirect:/instructor/dashboard";
+            return "redirect:/progress/report/" + dto.getStudentId() + "?saved";
         }
         return "redirect:/students";
+    }
+
+    @PostMapping("/delete")
+    public String deleteProgress(@RequestParam Long id, @RequestParam Long studentId) {
+        progressService.deleteProgress(id);
+        return "redirect:/progress/report/" + studentId + "?deleted";
     }
 
     @GetMapping("/report/{studentId}")
