@@ -10,4 +10,6 @@ public interface ProgressRepository extends JpaRepository<ProgressNote, Long> {
 
     // Custom query to find all progress notes for a specific student ID
     List<ProgressNote> findByStudent_Id(Long studentId);
+
+    void deleteByStudent_Id(Long studentId);
 }

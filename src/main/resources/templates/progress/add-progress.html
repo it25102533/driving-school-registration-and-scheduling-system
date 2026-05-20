@@ -31,7 +31,9 @@
                 <label for="studentId">Student</label>
                 <select id="studentId" th:field="*{studentId}" required>
                     <option value="" disabled selected>— Choose a student —</option>
-                    <option th:each="s : ${students}" th:value="${s.id}" th:text="${s.name}"></option>
+                    <option th:each="s : ${students}"
+                            th:value="${s.id}"
+                            th:text="|${s.name} — ${s.licenseCode != null ? s.licenseCode : 'No license'}|"></option>
                 </select>
 
                 <label for="lessonTopic">Lesson topic</label>

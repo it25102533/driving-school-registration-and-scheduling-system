@@ -10,4 +10,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     // Derived query method to fetch payment history for a specific student cleanly
     List<Payment> findByStudent_Id(Long studentId);
+
+    void deleteByStudent_Id(Long studentId);
 }
