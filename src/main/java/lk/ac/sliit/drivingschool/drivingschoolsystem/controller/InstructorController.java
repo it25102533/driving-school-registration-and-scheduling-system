@@ -2,6 +2,7 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.controller;
 
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.InstructorDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.InstructorService;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonPackageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ public class InstructorController {
 
     private static final String T = "instructor/";
     private final InstructorService instructorService;
+    private final LessonPackageService lessonPackageService;
 
-    public InstructorController(InstructorService instructorService) {
+    public InstructorController(InstructorService instructorService, LessonPackageService lessonPackageService) {
         this.instructorService = instructorService;
+        this.lessonPackageService = lessonPackageService;
     }
 
     @GetMapping
@@ -26,6 +29,7 @@ public class InstructorController {
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("instructor", new InstructorDto());
+        model.addAttribute("packages", lessonPackageService.getAllPackages());
         return T + "add-instructor";
     }
 
@@ -37,6 +41,7 @@ public class InstructorController {
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("instructor", dto);
+            model.addAttribute("packages", lessonPackageService.getAllPackages());
             return T + "add-instructor";
         }
     }
@@ -44,6 +49,7 @@ public class InstructorController {
     @GetMapping("/edit")
     public String showEditForm(@RequestParam Long id, Model model) {
         model.addAttribute("instructor", instructorService.getInstructorById(id));
+        model.addAttribute("packages", lessonPackageService.getAllPackages());
         return T + "edit-instructor";
     }
 
@@ -55,6 +61,7 @@ public class InstructorController {
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("instructor", dto);
+            model.addAttribute("packages", lessonPackageService.getAllPackages());
             return T + "edit-instructor";
         }
     }

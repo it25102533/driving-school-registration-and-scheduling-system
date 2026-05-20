@@ -4,10 +4,23 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.PaymentDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonPackageService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.PaymentService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Payment;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
+
+import java.io.ByteArrayOutputStream;
+import java.awt.Color;
 
 @Controller
 @RequestMapping("/student")
@@ -32,6 +45,17 @@ public class PaymentController {
         return "payment/packages";
     }
 
+    @GetMapping("/checkout")
+    public String checkout(@RequestParam Long packageId, Model model, HttpSession session) {
+        Student student = (Student) session.getAttribute("SESSION_STUDENT");
+        if (student == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("packageDetails", paymentService.getPackageById(packageId));
+        model.addAttribute("finalPrice", paymentService.calculateFinalPrice(student.getId(), packageId));
+        return "payment/checkout";
+    }
+
     @PostMapping("/buy-package")
     public String buyPackage(@RequestParam Long packageId, HttpSession session) {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
@@ -43,8 +67,20 @@ public class PaymentController {
         paymentDto.setStudentId(student.getId());
         paymentDto.setPackageId(packageId);
 
-        paymentService.processPayment(paymentDto);
-        return "redirect:/student/payment-history?success";
+        Long paymentId = paymentService.processPayment(paymentDto);
+        return "redirect:/student/payment-success?paymentId=" + paymentId;
+    }
+
+    @GetMapping("/payment-success")
+    public String paymentSuccess(@RequestParam Long paymentId, Model model, HttpSession session) {
+        Student student = (Student) session.getAttribute("SESSION_STUDENT");
+        if (student == null) {
+            return "redirect:/login";
+        }
+        
+        Payment payment = paymentService.getPaymentByIdAndStudent(paymentId, student.getId());
+        model.addAttribute("payment", payment);
+        return "payment/success";
     }
 
     @GetMapping("/payment-history")
@@ -52,5 +88,48 @@ public class PaymentController {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         model.addAttribute("history", paymentService.getStudentPaymentHistory(student.getId()));
         return "payment/history";
+    }
+
+    @GetMapping("/invoice/{id}")
+    public ResponseEntity<byte[]> downloadInvoice(@PathVariable Long id, HttpSession session) {
+        Student student = (Student) session.getAttribute("SESSION_STUDENT");
+        if (student == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Payment payment = paymentService.getPaymentByIdAndStudent(id, student.getId());
+
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, baos);
+            document.open();
+
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Color.BLACK);
+            Paragraph title = new Paragraph("RoadSync Payment Invoice", titleFont);
+            title.setAlignment(Paragraph.ALIGN_CENTER);
+            title.setSpacingAfter(20);
+            document.add(title);
+
+            Font regularFont = FontFactory.getFont(FontFactory.HELVETICA, 12, Color.BLACK);
+            
+            document.add(new Paragraph("Invoice ID: #" + payment.getId(), regularFont));
+            document.add(new Paragraph("Date: " + payment.getPaymentDate().toString(), regularFont));
+            document.add(new Paragraph("Student Name: " + payment.getStudent().getName(), regularFont));
+            document.add(new Paragraph("Package: " + payment.getLessonPackage().getPackageName(), regularFont));
+            document.add(new Paragraph("Amount Paid: LKR " + payment.getAmountPaid(), regularFont));
+
+            document.close();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "Invoice_" + payment.getId() + ".pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(baos.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

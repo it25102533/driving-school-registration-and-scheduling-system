@@ -19,4 +19,5 @@ public class InstructorDto {
     private String specialization;
     private String email;
     private String password;
+    private Long assignedPackageId;
 }

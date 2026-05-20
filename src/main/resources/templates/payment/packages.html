@@ -38,13 +38,11 @@
                         LKR <span th:text="${#numbers.formatDecimal(pkg.basePrice, 0, 'COMMA', 0, 'POINT')}">0</span>
                     </p>
                     <p class="rs-package-card__hint">Discount applied at purchase</p>
-                    <form th:action="@{/student/buy-package}" method="post">
-                        <input type="hidden" name="packageId" th:value="${pkg.id}">
-                        <button type="submit" class="rs-btn-buy"
-                                onclick="return confirm('Purchase this package?');">
+                    <div style="margin-top: 1rem;">
+                        <a th:href="@{/student/checkout(packageId=${pkg.id})}" class="rs-btn-buy" style="display: block; text-align: center; text-decoration: none;">
                             Select package
-                        </button>
-                    </form>
+                        </a>
+                    </div>
                 </div>
             </article>
         </div>
