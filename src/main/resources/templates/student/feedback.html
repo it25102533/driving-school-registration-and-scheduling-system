@@ -61,8 +61,11 @@
                 <h3>Rate a Course/Package</h3>
                 <form th:action="@{/student/feedback/course}" method="post">
 
-                    <label for="courseName">Course Name</label>
-                    <input id="courseName" type="text" name="courseName" placeholder="e.g., Beginners Package" required>
+                    <label for="courseName">Lesson package</label>
+                    <select id="courseName" name="courseName" required>
+                        <option value="" disabled selected>— Select a package —</option>
+                        <option th:each="pkg : ${packages}" th:value="${pkg.packageName}" th:text="${pkg.packageName}"></option>
+                    </select>
 
                     <label for="courseRating">Rating (1-5)</label>
                     <input id="courseRating" type="number" name="rating" min="1" max="5" value="5" required>
@@ -82,4 +85,3 @@
 <script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
 </body>
 </html>
-

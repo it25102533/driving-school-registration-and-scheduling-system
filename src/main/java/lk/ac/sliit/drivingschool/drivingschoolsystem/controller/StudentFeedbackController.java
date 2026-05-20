@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.StudentFeedbackDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonPackageService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.StudentFeedbackService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +16,14 @@ public class StudentFeedbackController {
 
     private final StudentFeedbackService feedbackService;
     private final InstructorRepository instructorRepository;
+    private final LessonPackageService lessonPackageService;
 
-    public StudentFeedbackController(StudentFeedbackService feedbackService, InstructorRepository instructorRepository) {
+    public StudentFeedbackController(StudentFeedbackService feedbackService,
+                                     InstructorRepository instructorRepository,
+                                     LessonPackageService lessonPackageService) {
         this.feedbackService = feedbackService;
         this.instructorRepository = instructorRepository;
+        this.lessonPackageService = lessonPackageService;
     }
 
     // FIXED: Endpoint changed to /feedback to cleanly match dashboard tiles and navigation links
@@ -32,20 +37,32 @@ public class StudentFeedbackController {
         model.addAttribute("feedbackDto", new StudentFeedbackDto());
         // Fetches all active instructors from MySQL to load into your template drop-down options
         model.addAttribute("instructors", instructorRepository.findAll());
+        model.addAttribute("packages", lessonPackageService.getAllPackages());
 
-        // FIXED: Returns "student/feedback" to perfectly align with your templates folder filename
         return "student/feedback";
     }
 
-    // FIXED: Mapped to take Instructor feedback form submissions
     @PostMapping("/feedback/instructor")
-    public String submitInstructorFeedback(@ModelAttribute("feedbackDto") StudentFeedbackDto dto, HttpSession session) {
+    public String submitInstructorFeedback(@RequestParam Long instructorId,
+                                           @RequestParam int rating,
+                                           @RequestParam(required = false) String comments,
+                                           HttpSession session) {
+        StudentFeedbackDto dto = new StudentFeedbackDto();
+        dto.setInstructorId(instructorId);
+        dto.setRating(rating);
+        dto.setComments(comments);
         return processFeedbackSubmission(dto, session);
     }
 
-    // FIXED: Mapped to take Course/Package feedback form submissions separately
     @PostMapping("/feedback/course")
-    public String submitCourseFeedback(@ModelAttribute("feedbackDto") StudentFeedbackDto dto, HttpSession session) {
+    public String submitCourseFeedback(@RequestParam String courseName,
+                                       @RequestParam int rating,
+                                       @RequestParam(required = false) String comments,
+                                       HttpSession session) {
+        StudentFeedbackDto dto = new StudentFeedbackDto();
+        dto.setCourseName(courseName);
+        dto.setRating(rating);
+        dto.setComments(comments);
         return processFeedbackSubmission(dto, session);
     }
 
