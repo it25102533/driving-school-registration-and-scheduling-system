@@ -49,6 +49,7 @@
                 <td th:text="${s.phone}"></td>
                 <td th:text="${s.address}"></td>
                 <td>
+                    <a th:href="@{/progress/report/{studentId}(studentId=${s.id})}" class="edit-btn">Progress</a>
                     <a th:href="@{/editStudent(id=${s.id})}" class="edit-btn">Edit</a>
                     <a th:href="@{/deleteStudent(id=${s.id})}" class="delete-btn"
                        onclick="return confirm('Delete this student record?');">Delete</a>
