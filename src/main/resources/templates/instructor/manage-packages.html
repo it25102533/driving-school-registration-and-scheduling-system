@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0c1222"/>
+  <title>Package Pricing — RoadSync</title>
+  <link rel="stylesheet" th:href="@{/landing.css}"/>
+  <link rel="stylesheet" th:href="@{/subsystem.css}"/>
+</head>
+<body class="rs-landing">
+
+<header th:replace="~{fragments/roadsync :: header('other')}"></header>
+
+<main class="rs-main student-shell">
+  <nav th:replace="~{fragments/roadsync :: staffToolbar}"></nav>
+
+  <div class="rs-page-nav">
+    <span class="nav-brand">Lesson package pricing</span>
+    <div class="nav-links">
+      <a th:href="@{/instructor/dashboard}">Staff dashboard</a>
+    </div>
+  </div>
+
+  <div class="table-container" style="max-width: 1100px;">
+    <h2>Prices in LKR</h2>
+    <p style="color: var(--rs-muted); margin: 0 0 1.25rem;">
+      Students see these prices on the packages page. Corporate and individual discounts still apply at checkout.
+    </p>
+
+    <p th:if="${param.saved}" class="success-msg">Package prices updated.</p>
+
+    <form th:action="@{/instructor/packages/update}" method="post">
+      <table>
+        <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Package</th>
+          <th>Lessons</th>
+          <th>Price (LKR)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pkg : ${packages}">
+          <td style="width: 100px;">
+            <img th:src="@{${pkg.imageUrl}}" th:alt="${pkg.packageName}"
+                 style="width: 88px; height: 55px; object-fit: cover; border-radius: 8px; display: block;"/>
+          </td>
+          <td>
+            <strong th:text="${pkg.packageName}">Package</strong>
+            <br/>
+            <span th:text="${pkg.description}" style="font-size: 0.85rem; color: var(--rs-muted);">—</span>
+          </td>
+          <td th:text="${pkg.numberOfLessons}">0</td>
+          <td>
+            <input type="hidden" name="packageId" th:value="${pkg.id}"/>
+            <input type="number" name="basePrice" th:value="${pkg.basePrice}"
+                   min="0" step="100" required
+                   style="width: 140px; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--rs-border); background: rgba(0,0,0,0.25); color: var(--rs-text);"/>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <button type="submit" class="edit-btn" style="cursor: pointer; border: none;">Save all prices</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/roadsync :: footer}"></footer>
+<script th:replace="~{fragments/roadsync :: login-dropdown-script}"></script>
+</body>
+</html>

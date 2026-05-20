@@ -17,23 +17,40 @@
 
     <div class="student-hero">
         <h1>Lesson <span style="color: var(--rs-teal);">packages</span></h1>
-        <p>Your student discount is applied automatically at checkout.</p>
+        <p>Choose a training bundle priced in <strong>LKR</strong>. Your
+            <span th:text="${studentType == 'Corporate' ? 'corporate (20%)' : 'student (10%)'}">student (10%)</span>
+            discount is applied automatically at checkout.</p>
     </div>
 
-    <div class="table-container" style="max-width: 960px;">
-        <h2 style="text-align: center;">Available packages</h2>
-        <div class="rs-package-grid">
-            <div class="rs-package-card" th:each="pkg : ${packages}">
-                <h3 th:text="${pkg.packageName}">Package</h3>
-                <p><strong th:text="${pkg.numberOfLessons}">0</strong> lessons</p>
-                <p class="rs-package-price">Rs. <span th:text="${#numbers.formatDecimal(pkg.basePrice, 1, 'COMMA', 2, 'POINT')}">0.00</span></p>
-                <p style="font-size: 0.85rem; color: var(--rs-muted); font-style: italic;">Discount applied at purchase.</p>
-                <form th:action="@{/student/buy-package}" method="post">
-                    <input type="hidden" name="packageId" th:value="${pkg.id}">
-                    <button type="submit" class="rs-btn-buy" onclick="return confirm('Purchase this package?');">Buy now</button>
-                </form>
-            </div>
+    <div class="rs-packages-section">
+        <div class="rs-package-grid rs-package-grid--catalog">
+            <article class="rs-package-card rs-package-card--photo" th:each="pkg : ${packages}">
+                <div class="rs-package-card__media">
+                    <img th:src="@{${pkg.imageUrl}}" th:alt="${pkg.packageName}" loading="lazy" width="800" height="500"/>
+                </div>
+                <div class="rs-package-card__body">
+                    <h3 th:text="${pkg.packageName}">Package</h3>
+                    <p class="rs-package-card__desc" th:text="${pkg.description}">Description</p>
+                    <p class="rs-package-card__meta">
+                        <span th:text="${pkg.numberOfLessons}">0</span> driving lessons
+                    </p>
+                    <p class="rs-package-price">
+                        LKR <span th:text="${#numbers.formatDecimal(pkg.basePrice, 0, 'COMMA', 0, 'POINT')}">0</span>
+                    </p>
+                    <p class="rs-package-card__hint">Discount applied at purchase</p>
+                    <form th:action="@{/student/buy-package}" method="post">
+                        <input type="hidden" name="packageId" th:value="${pkg.id}">
+                        <button type="submit" class="rs-btn-buy"
+                                onclick="return confirm('Purchase this package?');">
+                            Select package
+                        </button>
+                    </form>
+                </div>
+            </article>
         </div>
+        <p th:if="${#lists.isEmpty(packages)}" style="text-align: center; color: var(--rs-muted);">
+            No packages available yet. Ask your instructor to configure pricing.
+        </p>
     </div>
 </main>
 

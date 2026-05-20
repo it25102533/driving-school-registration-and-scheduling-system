@@ -18,9 +18,21 @@ public class LessonPackage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "package_name")
+    @Column(name = "package_name", nullable = false)
     private String packageName;
 
+    @Column(length = 600)
+    private String description;
+
+    @Column(name = "image_url", length = 255)
+    private String imageUrl;
+
+    @Column(name = "number_of_lessons", nullable = false)
     private int numberOfLessons;
+
+    @Column(name = "base_price", nullable = false)
     private double basePrice;
+
+    @Column(name = "sort_order", nullable = false)
+    private int sortOrder = 0;
 }
