@@ -21,10 +21,14 @@ import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.awt.Color;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping("/student")
 public class PaymentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     private final PaymentService paymentService;
     private final LessonPackageService lessonPackageService;
@@ -128,7 +132,7 @@ public class PaymentController {
                     .headers(headers)
                     .body(baos.toByteArray());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error generating invoice PDF", e);
             return ResponseEntity.internalServerError().build();
         }
     }
