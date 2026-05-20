@@ -27,8 +27,8 @@ public class PaymentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<LessonPackage> getAllPackages() {
-        return packageRepository.findAll();
+    public LessonPackage getPackageById(Long packageId) {
+        return packageRepository.findById(packageId).orElseThrow();
     }
 
     public void processPayment(PaymentDto dto) {

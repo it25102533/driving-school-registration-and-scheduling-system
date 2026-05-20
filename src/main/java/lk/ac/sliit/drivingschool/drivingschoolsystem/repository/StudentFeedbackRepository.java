@@ -18,6 +18,10 @@ public interface StudentFeedbackRepository extends JpaRepository<StudentFeedback
     // NEW: Pulls reviews for a specific package (e.g., "Beginners Package")
     List<StudentFeedback> findByCourseNameIgnoreCase(String courseName);
 
-    // NEW: Separates general course reviews from instructor specific reviews
-    List<StudentFeedback> findByInstructorIsNull();
+    // Separates general course reviews from instructor specific reviews
+    List<StudentFeedback> findByInstructorIsNullOrderBySubmissionDateDesc();
+
+    List<StudentFeedback> findByInstructorIsNotNullOrderBySubmissionDateDesc();
+
+    void deleteByStudent_Id(Long studentId);
 }

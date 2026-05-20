@@ -154,8 +154,12 @@ public class StudentController {
 
     @GetMapping("/deleteStudent")
     public String deleteStudent(@RequestParam Long id) {
-        studentService.deleteStudent(id);
-        return "redirect:/students";
+        try {
+            studentService.deleteStudent(id);
+            return "redirect:/students?deleted";
+        } catch (Exception e) {
+            return "redirect:/students?error=delete";
+        }
     }
 
     @GetMapping("/editStudent")

@@ -11,7 +11,7 @@
 
     <style>
         .rs-student-login { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
-        .signup-card { background: var(--rs-card); border: 1px solid var(--rs-border); padding: 2.5rem; border-radius: 16px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35); width: 100%; max-width: 500px; }
+        .signup-card { background: var(--rs-card); border: 1px solid var(--rs-border); padding: 2.5rem; border-radius: 16px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35); width: 100%; max-width: 640px; }
         .signup-card h2 { text-align: center; color: var(--rs-text); margin: 0 0 0.5rem; font-weight: 600; font-size: 1.5rem; }
         .signup-card .hint { text-align: center; color: var(--rs-muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
         .signup-card label { display: block; margin-top: 10px; font-size: 0.9rem; color: var(--rs-muted); font-weight: bold; }
@@ -21,6 +21,20 @@
         .error { color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; margin-bottom: 1rem; border: 1px solid #f87171;}
         .form-row { display: flex; gap: 15px; }
         .form-group { flex: 1; }
+        .license-select-header {
+            display: grid;
+            grid-template-columns: 4.5rem 1fr;
+            gap: 0.75rem;
+            margin-top: 10px;
+            padding: 0 1rem 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--rs-teal);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .license-select { font-size: 0.92rem; }
+        .license-select option { padding: 0.35rem 0; }
     </style>
 </head>
 <body class="rs-landing">
@@ -64,19 +78,15 @@
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="licenseType">License Type Goal</label>
-                    <input id="licenseType" th:field="*{licenseType}" type="text" placeholder="e.g. Light Vehicle"/>
-                </div>
-                <div class="form-group">
-                    <label for="studentType">Student Type</label>
-                    <select id="studentType" th:field="*{studentType}">
-                        <option value="Individual">Individual</option>
-                        <option value="Corporate">Corporate</option>
-                    </select>
-                </div>
+            <label for="licenseType">License type goal</label>
+            <div class="license-select-header" aria-hidden="true">
+                <span>License type</span>
+                <span>Vehicle category</span>
             </div>
+            <select id="licenseType" class="license-select" th:field="*{licenseType}" required>
+                <option value="" disabled selected>— Select your license goal —</option>
+                <th:block th:replace="~{fragments/license-options :: licenseOptions}"></th:block>
+            </select>
 
             <label for="address">Home Address</label>
             <textarea id="address" th:field="*{address}" rows="2" placeholder="123 Main St, City"></textarea>

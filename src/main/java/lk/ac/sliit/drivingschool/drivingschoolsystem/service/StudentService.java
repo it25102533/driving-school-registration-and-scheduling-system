@@ -3,9 +3,14 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.service;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.StudentDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.StudentLoginDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.PaymentRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.ProgressRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentFeedbackRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,20 +21,35 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LessonRepository lessonRepository;
+    private final ProgressRepository progressRepository;
+    private final PaymentRepository paymentRepository;
+    private final StudentFeedbackRepository feedbackRepository;
 
-    public StudentService(StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
+    public StudentService(StudentRepository studentRepository,
+                          PasswordEncoder passwordEncoder,
+                          LessonRepository lessonRepository,
+                          ProgressRepository progressRepository,
+                          PaymentRepository paymentRepository,
+                          StudentFeedbackRepository feedbackRepository) {
         this.studentRepository = studentRepository;
         this.passwordEncoder = passwordEncoder;
+        this.lessonRepository = lessonRepository;
+        this.progressRepository = progressRepository;
+        this.paymentRepository = paymentRepository;
+        this.feedbackRepository = feedbackRepository;
     }
 
     public void registerStudent(StudentDto dto) {
-        // PREVENT DUPLICATES: Check if email exists before saving
         if (studentRepository.existsByEmailIgnoreCase(dto.getEmail())) {
             throw new IllegalArgumentException("Email is already registered!");
         }
 
         Student student = new Student();
         mapDtoToEntity(dto, student);
+        if (student.getStudentType() == null || student.getStudentType().isBlank()) {
+            student.setStudentType("Individual");
+        }
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             student.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
@@ -38,7 +58,6 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    // ENCAPSULATION: Return a list of DTOs, not the raw Entities
     public List<StudentDto> getAllStudents() {
         return studentRepository.findAll()
                 .stream()
@@ -46,14 +65,18 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteStudent(Long id) {
+        lessonRepository.deleteByStudent_Id(id);
+        progressRepository.deleteByStudent_Id(id);
+        paymentRepository.deleteByStudent_Id(id);
+        feedbackRepository.deleteByStudent_Id(id);
         studentRepository.deleteById(id);
     }
 
     public StudentDto getStudentById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
-
         return mapEntityToDto(student);
     }
 
@@ -63,7 +86,6 @@ public class StudentService {
 
         mapDtoToEntity(dto, student);
 
-        // Only update password if a new one is provided
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             student.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         }
@@ -72,7 +94,6 @@ public class StudentService {
     }
 
     public Optional<Student> authenticate(StudentLoginDto loginDto) {
-        // Primary Login: Email & Password
         if (loginDto.getEmail() != null && !loginDto.getEmail().isEmpty()) {
             return studentRepository.findByEmailIgnoreCase(loginDto.getEmail().trim())
                     .filter(s -> s.getPasswordHash() != null)
@@ -85,7 +106,6 @@ public class StudentService {
                     });
         }
 
-        // Legacy Login fallback
         if (loginDto.getStudentId() != null && loginDto.getName() != null) {
             return studentRepository.findById(loginDto.getStudentId())
                     .filter(s -> s.getName().equalsIgnoreCase(loginDto.getName().trim()));
@@ -94,7 +114,6 @@ public class StudentService {
         return Optional.empty();
     }
 
-    // Helper Method 1: Map DTO to Entity
     private void mapDtoToEntity(StudentDto dto, Student student) {
         student.setName(dto.getName());
         student.setPhone(dto.getPhone());
@@ -105,7 +124,6 @@ public class StudentService {
         student.setAddress(dto.getAddress());
     }
 
-    // Helper Method 2: Map Entity to DTO (Prevents code duplication)
     private StudentDto mapEntityToDto(Student student) {
         StudentDto dto = new StudentDto();
         dto.setId(student.getId());
@@ -113,9 +131,28 @@ public class StudentService {
         dto.setPhone(student.getPhone());
         dto.setAge(student.getAge());
         dto.setLicenseType(student.getLicenseType());
+        enrichLicenseFields(dto);
         dto.setStudentType(student.getStudentType());
         dto.setEmail(student.getEmail());
         dto.setAddress(student.getAddress());
         return dto;
+    }
+
+    private void enrichLicenseFields(StudentDto dto) {
+        String raw = dto.getLicenseType();
+        if (raw == null || raw.isBlank()) {
+            dto.setLicenseDisplay("—");
+            return;
+        }
+        if (raw.contains("|")) {
+            String[] parts = raw.split("\\|", 2);
+            dto.setLicenseCode(parts[0].trim());
+            dto.setLicenseCategory(parts.length > 1 ? parts[1].trim() : "");
+            dto.setLicenseDisplay(dto.getLicenseCode() + " — " + dto.getLicenseCategory());
+        } else {
+            dto.setLicenseCode(raw);
+            dto.setLicenseCategory("");
+            dto.setLicenseDisplay(raw);
+        }
     }
 }

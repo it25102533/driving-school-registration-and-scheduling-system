@@ -19,6 +19,10 @@
     <div class="student-hero">
         <h1>Hi, <span th:text="${student.name}">Student</span></h1>
         <p style="font-weight: bold; color: var(--rs-teal); margin-top: 5px; margin-bottom: 10px;">Your Student ID is: <span th:text="${student.id}">0000</span></p>
+        <p style="margin-bottom: 6px;">
+            <strong>License goal:</strong>
+            <span th:text="${student.licenseDisplay != null ? student.licenseDisplay : '—'}" style="color: var(--rs-accent);">—</span>
+        </p>
         <p>Welcome to your RoadSync student dashboard.</p>
     </div>
 
@@ -41,7 +45,7 @@
 
         <a class="student-card" th:href="@{/student/packages}">
             <h3>Packages &amp; purchase</h3>
-            <p>Browse lesson bundles and complete payment.</p>
+            <p>Browse driving lesson bundles priced in LKR and complete payment.</p>
         </a>
 
         <a class="student-card" th:href="@{/student/payment-history}">
