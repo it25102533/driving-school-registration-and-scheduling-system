@@ -4,7 +4,9 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.InstructorDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.InstructorService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonService;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonPackageService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.StudentFeedbackService;
+import java.util.List;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +23,16 @@ public class InstructorPortalController {
     private final InstructorService instructorService;
     private final LessonService lessonService;
     private final StudentFeedbackService feedbackService;
+    private final LessonPackageService lessonPackageService;
 
     public InstructorPortalController(InstructorService instructorService,
                                       LessonService lessonService,
-                                      StudentFeedbackService feedbackService) {
+                                      StudentFeedbackService feedbackService,
+                                      LessonPackageService lessonPackageService) {
         this.instructorService = instructorService;
         this.lessonService = lessonService;
         this.feedbackService = feedbackService;
+        this.lessonPackageService = lessonPackageService;
     }
 
     @GetMapping("/dashboard")
@@ -44,6 +49,20 @@ public class InstructorPortalController {
     public String deleteFeedback(@RequestParam Long id) {
         feedbackService.deleteFeedback(id);
         return "redirect:/instructor/dashboard?feedbackDeleted";
+    }
+
+    @GetMapping("/packages")
+    public String managePackages(HttpSession session, Model model) {
+        getLoggedInInstructor(session);
+        model.addAttribute("packages", lessonPackageService.getAllPackages());
+        return T + "manage-packages";
+    }
+
+    @PostMapping("/packages/update")
+    public String updatePackagePrices(@RequestParam("packageId") List<Long> packageId,
+                                      @RequestParam("basePrice") List<Double> basePrice) {
+        lessonPackageService.updatePrices(packageId, basePrice);
+        return "redirect:/instructor/packages?saved";
     }
 
     @GetMapping("/my-lessons")
