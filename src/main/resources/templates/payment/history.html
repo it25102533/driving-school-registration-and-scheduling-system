@@ -39,7 +39,7 @@
             <tr th:each="pay : ${history}">
                 <td th:text="${pay.formattedDate}"></td>
                 <td th:text="${pay.packageName}"></td>
-                <td class="rs-status-ok">Rs. <span th:text="${#numbers.formatDecimal(pay.amountPaid, 1, 'COMMA', 2, 'POINT')}">0.00</span></td>
+                <td class="rs-status-ok">LKR <span th:text="${#numbers.formatDecimal(pay.amountPaid, 0, 'COMMA', 0, 'POINT')}">0</span></td>
             </tr>
             <tr th:if="${#lists.isEmpty(history)}">
                 <td colspan="3" style="text-align: center; color: var(--rs-muted);">No purchases yet.</td>
