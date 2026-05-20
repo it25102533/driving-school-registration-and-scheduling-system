@@ -30,6 +30,9 @@ public class StudentService {
 
         Student student = new Student();
         mapDtoToEntity(dto, student);
+        if (student.getStudentType() == null || student.getStudentType().isBlank()) {
+            student.setStudentType("Individual");
+        }
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             student.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
