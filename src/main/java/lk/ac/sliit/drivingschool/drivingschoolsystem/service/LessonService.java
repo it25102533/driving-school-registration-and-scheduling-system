@@ -4,8 +4,8 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.LessonDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Lesson;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
-import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository; // Afthal's Repo
-import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.VehicleRepository;       // Mokeethan's Repo
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

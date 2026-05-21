@@ -26,7 +26,6 @@ public class StudentFeedbackController {
         this.lessonPackageService = lessonPackageService;
     }
 
-    // FIXED: Endpoint changed to /feedback to cleanly match dashboard tiles and navigation links
     @GetMapping("/feedback")
     public String showFeedbackForm(HttpSession session, Model model) {
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
@@ -35,7 +34,6 @@ public class StudentFeedbackController {
         }
 
         model.addAttribute("feedbackDto", new StudentFeedbackDto());
-        // Fetches all active instructors from MySQL to load into your template drop-down options
         model.addAttribute("instructors", instructorRepository.findAll());
         model.addAttribute("packages", lessonPackageService.getAllPackages());
 
@@ -66,7 +64,6 @@ public class StudentFeedbackController {
         return processFeedbackSubmission(dto, session);
     }
 
-    // Reusable core submission processing routing module
     private String processFeedbackSubmission(StudentFeedbackDto dto, HttpSession session) {
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
         if (loggedInStudent == null) {
@@ -74,7 +71,6 @@ public class StudentFeedbackController {
         }
 
         feedbackService.saveFeedback(loggedInStudent, dto);
-        // FIXED: Redirects to ?sent to trigger the green alert message box in your frontend view template
         return "redirect:/student/feedback?sent";
     }
 }

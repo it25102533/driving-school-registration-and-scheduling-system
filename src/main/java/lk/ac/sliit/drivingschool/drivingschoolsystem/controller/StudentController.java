@@ -26,7 +26,6 @@ public class StudentController {
 
     @GetMapping("/student/dashboard")
     public String showDashboard(HttpSession session, Model model) {
-        // FIXED: Added defensive null handling to protect against expired session crashes
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
         if (loggedInStudent == null) {
             return "redirect:/login";
@@ -48,11 +47,10 @@ public class StudentController {
         return T + "progress"; 
     }
 
-    // FIXED: Changed endpoint to /signup to mirror roadsync.html fragments and login templates exactly
     @GetMapping("/signup")
     public String showForm(Model model) {
         model.addAttribute("student", new StudentDto());
-        return "register"; // Resolves directly to templates/register.html if it's a public landing-side form
+        return "register";
     }
 
     @PostMapping("/saveStudent")
@@ -67,13 +65,11 @@ public class StudentController {
         }
     }
 
-    // FIXED: Mapped /login/student explicitly to point back to standard template path mappings
     @GetMapping({"/login", "/login/student"})
     public String showLoginPage(@RequestParam(required = false) String required, Model model) {
         if (required != null) {
             model.addAttribute("requiredLogin", true);
         }
-        // FIXED: Removed the 'student/' prefix prefixing if login.html lives directly in templates root folder
         return "login";
     }
 
@@ -116,7 +112,6 @@ public class StudentController {
         return "redirect:/login?logout";
     }
 
-    // NEW: Restful mapping endpoint requested by the dashboard.html profile card tile
     @GetMapping("/student/profile")
     public String showStudentProfile(HttpSession session, Model model) {
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");

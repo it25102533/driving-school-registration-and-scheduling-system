@@ -1,8 +1,8 @@
 package lk.ac.sliit.drivingschool.drivingschoolsystem.entity;
 
-import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;        // Kaveen's Module
-import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Vehicle; // Mokeethan's Module
-import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor; // Afthal's Module
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Vehicle;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 
 import jakarta.persistence.*;
 import lombok.Getter;
