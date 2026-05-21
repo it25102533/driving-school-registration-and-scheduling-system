@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "vehicles")
-@Data                // Generates getters, setters, toString, equals, and hashCode
-@NoArgsConstructor   // Generates the empty constructor required by JPA
-@AllArgsConstructor  // Generates a constructor with all fields
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vehicle {
 
     @Id

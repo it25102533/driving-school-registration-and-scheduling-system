@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
-@NoArgsConstructor // Handles your default constructor block automatically
+@NoArgsConstructor
 public class StudentFeedbackDto {
 
     private Long id;

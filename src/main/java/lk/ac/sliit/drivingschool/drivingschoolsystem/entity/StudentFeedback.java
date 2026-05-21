@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "student_feedback")
 @Getter
 @Setter
-@NoArgsConstructor // Automatically injects your default constructor block
+@NoArgsConstructor
 public class StudentFeedback {
 
     @Id
@@ -21,12 +21,10 @@ public class StudentFeedback {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    // FIXED: Changed nullable to true so this entity can handle BOTH course feedback and instructor feedback forms
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", nullable = true)
     private Instructor instructor;
 
-    // NEW: Captures the course/package name parameter submitted by your secondary form
     @Column(name = "course_name")
     private String courseName;
 

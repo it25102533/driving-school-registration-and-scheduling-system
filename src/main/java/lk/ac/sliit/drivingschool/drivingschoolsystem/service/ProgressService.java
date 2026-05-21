@@ -4,7 +4,7 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.ProgressNoteDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.ProgressNote;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.ProgressRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
-import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository; // Assumed matching core repo location
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

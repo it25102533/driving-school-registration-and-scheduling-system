@@ -15,7 +15,6 @@ public interface StudentFeedbackRepository extends JpaRepository<StudentFeedback
     // Pulls all performance feedback given to a specific instructor
     List<StudentFeedback> findByInstructorId(Long instructorId);
 
-    // NEW: Pulls reviews for a specific package (e.g., "Beginners Package")
     List<StudentFeedback> findByCourseNameIgnoreCase(String courseName);
 
     // Separates general course reviews from instructor specific reviews

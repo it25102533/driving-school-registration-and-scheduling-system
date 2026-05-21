@@ -1,6 +1,6 @@
 package lk.ac.sliit.drivingschool.drivingschoolsystem.entity;
 
-import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student; // Pointing directly to your unified Student entity
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -14,7 +14,6 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
 
-    // This constructor matches the Spring Boot standard for dependency injection
     public VehicleController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
     }
