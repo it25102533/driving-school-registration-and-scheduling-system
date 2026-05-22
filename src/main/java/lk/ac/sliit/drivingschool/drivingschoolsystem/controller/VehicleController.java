@@ -5,6 +5,8 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.service.VehicleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @Controller
 @RequestMapping("/vehicles")
@@ -50,8 +52,15 @@ public class VehicleController {
     }
 
     @GetMapping("/delete")
-    public String deleteVehicle(@RequestParam Long id) {
-        vehicleService.deleteVehicle(id);
+    public String deleteVehicle(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        try {
+            vehicleService.deleteVehicle(id);
+            redirectAttributes.addFlashAttribute("success", "Vehicle deleted successfully.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("error", "Cannot delete vehicle. It is currently assigned to one or more lessons.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An error occurred while trying to delete the vehicle.");
+        }
         return "redirect:/vehicles";
     }
 }
