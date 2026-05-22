@@ -145,10 +145,7 @@
                 <span>Base Price</span>
                 <span>LKR <span th:text="${#numbers.formatDecimal(packageDetails.basePrice, 0, 'COMMA', 0, 'POINT')}">0</span></span>
             </div>
-            <div class="summary-item" style="color: var(--rs-primary);">
-                <span>Discount Applied</span>
-                <span>- LKR <span th:text="${#numbers.formatDecimal(packageDetails.basePrice - finalPrice, 0, 'COMMA', 0, 'POINT')}">0</span></span>
-            </div>
+
             <div class="summary-item total">
                 <span>Total to Pay</span>
                 <span>LKR <span th:text="${#numbers.formatDecimal(finalPrice, 0, 'COMMA', 0, 'POINT')}">0</span></span>
