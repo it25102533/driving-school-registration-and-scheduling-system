@@ -43,7 +43,7 @@ public class PaymentService {
         return packageRepository.findById(packageId).orElseThrow();
     }
 
-    public Long processPayment(PaymentDto dto) {
+    public Long processPayment(PaymentDto dto) { // PROCESSING PAYMENTS
         Student student = studentRepository.findById(dto.getStudentId()).orElseThrow();
         LessonPackage lessonPackage = packageRepository.findById(dto.getPackageId()).orElseThrow();
 
@@ -55,11 +55,11 @@ public class PaymentService {
         payment.setAmountPaid(finalPrice);
         payment.setPaymentDate(LocalDateTime.now());
 
-        Payment savedPayment = paymentRepository.save(payment);
+        Payment savedPayment = paymentRepository.save(payment); // CREATING PAYMENT DATABASE AND STORING
 
         // Auto-generate lessons based on package
         List<Instructor> availableInstructors = instructorRepository.findByAssignedPackage_Id(lessonPackage.getId());
-        Instructor assignedInstructor = null;
+        Instructor assignedInstructor = null; // PICKING AND ASSIGNING INSTRUCTOR
         if (!availableInstructors.isEmpty()) {
             assignedInstructor = availableInstructors.get(0); // Pick first available one
         }
@@ -77,14 +77,14 @@ public class PaymentService {
         return savedPayment.getId();
     }
 
-    public Payment getPaymentByIdAndStudent(Long paymentId, Long studentId) {
+    public Payment getPaymentByIdAndStudent(Long paymentId, Long studentId) { // ONLY STUDENT CAN VIEW THE RECEIPT
         return paymentRepository.findByIdAndStudent_Id(paymentId, studentId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
     }
 
     public List<PaymentDto> getStudentPaymentHistory(Long studentId) {
         // Defined outside the stream loop so it only initializes once in memory
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy"); // STORES IN HISTORY
 
         return paymentRepository.findByStudent_Id(studentId).stream().map(payment -> {
             PaymentDto dto = new PaymentDto();
@@ -93,7 +93,7 @@ public class PaymentService {
             dto.setAmountPaid(payment.getAmountPaid());
 
             if (payment.getPaymentDate() != null) {
-                dto.setFormattedDate(payment.getPaymentDate().format(formatter));
+                dto.setFormattedDate(payment.getPaymentDate().format(formatter)); // CONVERTS RAW DATE INTO A READABLE PATTERN
             }
             return dto;
         }).collect(Collectors.toList());

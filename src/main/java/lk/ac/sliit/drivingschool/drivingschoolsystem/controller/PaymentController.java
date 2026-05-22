@@ -49,19 +49,19 @@ public class PaymentController {
         return "payment/packages";
     }
 
-    @GetMapping("/checkout")
+    @GetMapping("/checkout") // PROCESSING CHECKOUT
     public String checkout(@RequestParam Long packageId, Model model, HttpSession session) {
-        Student student = (Student) session.getAttribute("SESSION_STUDENT");
+        Student student = (Student) session.getAttribute("SESSION_STUDENT"); // IF THE STUDENT IS LOGGED IN
         if (student == null) {
             return "redirect:/login";
         }
-        LessonPackage lessonPackage = paymentService.getPackageById(packageId);
+        LessonPackage lessonPackage = paymentService.getPackageById(packageId); // TO SHOW DETAILS IN CHECKOUT PAGE
         model.addAttribute("packageDetails", lessonPackage);
         model.addAttribute("finalPrice", lessonPackage.getBasePrice());
         return "payment/checkout";
     }
 
-    @PostMapping("/buy-package")
+    @PostMapping("/buy-package") // PAY
     public String buyPackage(@RequestParam Long packageId, HttpSession session) {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         if (student == null) {
@@ -70,13 +70,13 @@ public class PaymentController {
 
         PaymentDto paymentDto = new PaymentDto();
         paymentDto.setStudentId(student.getId());
-        paymentDto.setPackageId(packageId);
+        paymentDto.setPackageId(packageId); // SENDS INFO TO CREATE DATABASE
 
-        Long paymentId = paymentService.processPayment(paymentDto);
+        Long paymentId = paymentService.processPayment(paymentDto); // PAYMENT SUCCESS
         return "redirect:/student/payment-success?paymentId=" + paymentId;
     }
 
-    @GetMapping("/payment-success")
+    @GetMapping("/payment-success") // POST PAYMENT CONFIRMATION
     public String paymentSuccess(@RequestParam Long paymentId, Model model, HttpSession session) {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         if (student == null) {
@@ -88,14 +88,14 @@ public class PaymentController {
         return "payment/success";
     }
 
-    @GetMapping("/payment-history")
+    @GetMapping("/payment-history") // PAYMENT HISTORY
     public String viewHistory(HttpSession session, Model model) {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         model.addAttribute("history", paymentService.getStudentPaymentHistory(student.getId()));
         return "payment/history";
     }
 
-    @GetMapping("/invoice/{id}")
+    @GetMapping("/invoice/{id}") // CREATING AN INVOICE
     public ResponseEntity<byte[]> downloadInvoice(@PathVariable Long id, HttpSession session) {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         if (student == null) {
@@ -104,12 +104,12 @@ public class PaymentController {
 
         Payment payment = paymentService.getPaymentByIdAndStudent(id, student.getId());
 
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) { // PDF INITIALIZER
             Document document = new Document();
             PdfWriter.getInstance(document, baos);
             document.open();
 
-            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Color.BLACK);
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Color.BLACK); // INVOICE DETAILS
             Paragraph title = new Paragraph("RoadSync Payment Invoice", titleFont);
             title.setAlignment(Paragraph.ALIGN_CENTER);
             title.setSpacingAfter(20);
@@ -125,14 +125,14 @@ public class PaymentController {
 
             document.close();
 
-            HttpHeaders headers = new HttpHeaders();
+            HttpHeaders headers = new HttpHeaders(); // DOWNLOADING
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("attachment", "Invoice_" + payment.getId() + ".pdf");
 
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(baos.toByteArray());
-        } catch (Exception e) {
+        } catch (Exception e) { // RUNTIME ERROR (500 SERVER ERROR)
             logger.error("Error generating invoice PDF", e);
             return ResponseEntity.internalServerError().build();
         }

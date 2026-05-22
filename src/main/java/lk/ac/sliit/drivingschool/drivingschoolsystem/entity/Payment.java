@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Payment {
 
-    @Id
+    @Id // GENERATING PRIMARY KEY
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // FOREIGN KEY
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
@@ -29,5 +29,5 @@ public class Payment {
     private LessonPackage lessonPackage;
 
     private double amountPaid;
-    private LocalDateTime paymentDate;
+    private LocalDateTime paymentDate; // LOCAL DATE&TIME
 }
