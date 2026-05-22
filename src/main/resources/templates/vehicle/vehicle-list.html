@@ -23,6 +23,10 @@
 
     <div class="table-container">
         <h2>All vehicles</h2>
+        
+        <p th:if="${error}" class="error-msg" th:text="${error}" style="text-align: center; color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 1rem;"></p>
+        <p th:if="${success}" class="success-msg" th:text="${success}" style="text-align: center; color: var(--rs-teal); background: rgba(0, 204, 153, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 1rem;"></p>
+
         <table>
             <thead>
             <tr>
