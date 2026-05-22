@@ -40,16 +40,13 @@ public class StudentService {
         this.feedbackRepository = feedbackRepository;
     }
 
-    public void registerStudent(StudentDto dto) {
+    public void registerStudent(StudentDto dto) { // STUDENT REGISTRATION
         if (studentRepository.existsByEmailIgnoreCase(dto.getEmail())) {
             throw new IllegalArgumentException("Email is already registered!");
         }
 
         Student student = new Student();
         mapDtoToEntity(dto, student);
-        if (student.getStudentType() == null || student.getStudentType().isBlank()) {
-            student.setStudentType("Individual");
-        }
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
             student.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
@@ -119,7 +116,6 @@ public class StudentService {
         student.setPhone(dto.getPhone());
         student.setAge(dto.getAge());
         student.setLicenseType(dto.getLicenseType());
-        student.setStudentType(dto.getStudentType());
         student.setEmail(dto.getEmail());
         student.setAddress(dto.getAddress());
     }
@@ -132,13 +128,12 @@ public class StudentService {
         dto.setAge(student.getAge());
         dto.setLicenseType(student.getLicenseType());
         enrichLicenseFields(dto);
-        dto.setStudentType(student.getStudentType());
         dto.setEmail(student.getEmail());
         dto.setAddress(student.getAddress());
         return dto;
     }
 
-    private void enrichLicenseFields(StudentDto dto) {
+    private void enrichLicenseFields(StudentDto dto) { // LICENSE TYPE
         String raw = dto.getLicenseType();
         if (raw == null || raw.isBlank()) {
             dto.setLicenseDisplay("—");

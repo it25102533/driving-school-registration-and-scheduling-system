@@ -3,6 +3,7 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.controller;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.PaymentDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonPackageService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.PaymentService;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.LessonPackage;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Payment;
 import jakarta.servlet.http.HttpSession;
@@ -38,14 +39,13 @@ public class PaymentController {
         this.lessonPackageService = lessonPackageService;
     }
 
-    @GetMapping("/packages")
+    @GetMapping("/packages") // DISPLAY AVAILABLE PACKAGES
     public String viewPackages(Model model, HttpSession session) {
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         if (student == null) {
             return "redirect:/login";
         }
         model.addAttribute("packages", lessonPackageService.getAllPackages());
-        model.addAttribute("studentType", student.getStudentType());
         return "payment/packages";
     }
 
@@ -55,8 +55,9 @@ public class PaymentController {
         if (student == null) {
             return "redirect:/login";
         }
-        model.addAttribute("packageDetails", paymentService.getPackageById(packageId));
-        model.addAttribute("finalPrice", paymentService.calculateFinalPrice(student.getId(), packageId));
+        LessonPackage lessonPackage = paymentService.getPackageById(packageId);
+        model.addAttribute("packageDetails", lessonPackage);
+        model.addAttribute("finalPrice", lessonPackage.getBasePrice());
         return "payment/checkout";
     }
 

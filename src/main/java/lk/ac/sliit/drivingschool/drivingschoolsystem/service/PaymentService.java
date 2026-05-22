@@ -43,20 +43,11 @@ public class PaymentService {
         return packageRepository.findById(packageId).orElseThrow();
     }
 
-    public double calculateFinalPrice(Long studentId, Long packageId) {
-        Student student = studentRepository.findById(studentId).orElseThrow();
-        LessonPackage lessonPackage = packageRepository.findById(packageId).orElseThrow();
-        double discount = student.calculateDiscount(lessonPackage.getBasePrice());
-        return lessonPackage.getBasePrice() - discount;
-    }
-
     public Long processPayment(PaymentDto dto) {
         Student student = studentRepository.findById(dto.getStudentId()).orElseThrow();
         LessonPackage lessonPackage = packageRepository.findById(dto.getPackageId()).orElseThrow();
 
-        // Business Logic calculating the final price based on the custom student discount
-        double discount = student.calculateDiscount(lessonPackage.getBasePrice());
-        double finalPrice = lessonPackage.getBasePrice() - discount;
+        double finalPrice = lessonPackage.getBasePrice();
 
         Payment payment = new Payment();
         payment.setStudent(student);

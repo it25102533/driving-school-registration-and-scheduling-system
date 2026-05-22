@@ -19,7 +19,6 @@ public class Student extends Person {
     private int age;
 
     private String licenseType;
-    private String studentType;
 
     @Column(unique = true, length = 128, nullable = false)
     private String email;
@@ -29,11 +28,4 @@ public class Student extends Person {
 
     @Column(length = 500)
     private String address;
-
-    public double calculateDiscount(double basePrice) {
-        if ("Corporate".equalsIgnoreCase(this.studentType)) {
-            return basePrice * 0.2;
-        }
-        return basePrice * 0.1;
-    }
 }

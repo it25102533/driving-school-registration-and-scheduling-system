@@ -17,9 +17,7 @@
 
     <div class="student-hero">
         <h1>Lesson <span style="color: var(--rs-teal);">packages</span></h1>
-        <p>Choose a training bundle priced in <strong>LKR</strong>. Your
-            <span th:text="${studentType == 'Corporate' ? 'corporate (20%)' : 'student (10%)'}">student (10%)</span>
-            discount is applied automatically at checkout.</p>
+        <p>Explore our premium driving lesson packages designed to fit your goals.</p>
     </div>
 
     <div class="rs-packages-section">
@@ -37,7 +35,7 @@
                     <p class="rs-package-price">
                         LKR <span th:text="${#numbers.formatDecimal(pkg.basePrice, 0, 'COMMA', 0, 'POINT')}">0</span>
                     </p>
-                    <p class="rs-package-card__hint">Discount applied at purchase</p>
+
                     <div style="margin-top: 1rem;">
                         <a th:href="@{/student/checkout(packageId=${pkg.id})}" class="rs-btn-buy" style="display: block; text-align: center; text-decoration: none;">
                             Select package

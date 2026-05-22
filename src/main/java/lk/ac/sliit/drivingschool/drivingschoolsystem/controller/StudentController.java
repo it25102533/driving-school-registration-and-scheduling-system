@@ -15,7 +15,7 @@ import java.util.Optional;
 @Controller
 public class StudentController {
 
-    private static final String T = "student/";
+    private static final String T = "student/"; // CALLING THE STUDENT HTML
     private final StudentService studentService;
     private final ProgressService progressService;
 
@@ -24,7 +24,7 @@ public class StudentController {
         this.progressService = progressService;
     }
 
-    @GetMapping("/student/dashboard")
+    @GetMapping("/student/dashboard") // DASHBOARD
     public String showDashboard(HttpSession session, Model model) {
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
         if (loggedInStudent == null) {
@@ -36,7 +36,7 @@ public class StudentController {
         return T + "dashboard";
     }
 
-    @GetMapping("/student/progress")
+    @GetMapping("/student/progress") // PROGRESS
     public String showProgress(HttpSession session, Model model) {
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
         if (loggedInStudent == null) {
@@ -47,25 +47,25 @@ public class StudentController {
         return T + "progress"; 
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/signup") //REGISTRATION
     public String showForm(Model model) {
         model.addAttribute("student", new StudentDto());
         return "register";
     }
 
-    @PostMapping("/saveStudent")
+    @PostMapping("/saveStudent")// PASSES DATA IN THE FIELDS TO REGISTER A NEW STUDENT
     public String saveStudent(@ModelAttribute("student") StudentDto studentDto, Model model) {
         try {
             studentService.registerStudent(studentDto);
             return "redirect:/login?success";
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) { // ERROR HANDLING
             model.addAttribute("error", e.getMessage());
             model.addAttribute("student", studentDto);
             return "register";
         }
     }
 
-    @GetMapping({"/login", "/login/student"})
+    @GetMapping({"/login", "/login/student"}) //  LOGIN AUTHENTICATION
     public String showLoginPage(@RequestParam(required = false) String required, Model model) {
         if (required != null) {
             model.addAttribute("requiredLogin", true);
@@ -73,7 +73,7 @@ public class StudentController {
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login") // CHECKS WHETHER IT'S A VALID UN AND PW
     public String processLogin(StudentLoginDto loginDto, HttpSession session, Model model) {
         Optional<Student> authenticatedStudent = studentService.authenticate(loginDto);
 
@@ -86,7 +86,7 @@ public class StudentController {
         return "login";
     }
 
-    @PostMapping("/login/legacy")
+    @PostMapping("/login/legacy") //LOGIN USING ID
     public String processLegacyLogin(@RequestParam String name, @RequestParam Long studentId, HttpSession session, Model model) {
         try {
             StudentDto studentDto = studentService.getStudentById(studentId);
@@ -106,13 +106,13 @@ public class StudentController {
         return "login";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/logout") //LOGOUT
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login?logout";
     }
 
-    @GetMapping("/student/profile")
+    @GetMapping("/student/profile") //VIEW OR CHANGE PROFILE INFO
     public String showStudentProfile(HttpSession session, Model model) {
         Student loggedInStudent = (Student) session.getAttribute("SESSION_STUDENT");
         if (loggedInStudent == null) {
@@ -143,13 +143,13 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/students")
+    @GetMapping("/students") // TO VIEW STUDENT
     public String viewStudents(Model model) {
         model.addAttribute("allStudents", studentService.getAllStudents());
         return T + "student-list";
     }
 
-    @GetMapping("/deleteStudent")
+    @GetMapping("/deleteStudent") // TO DELETE STUDENT
     public String deleteStudent(@RequestParam Long id) {
         try {
             studentService.deleteStudent(id);
@@ -159,14 +159,14 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/editStudent")
+    @GetMapping("/editStudent") // TO EDIT A STUDENT
     public String showEditForm(@RequestParam Long id, Model model) {
         StudentDto studentDto = studentService.getStudentById(id);
         model.addAttribute("student", studentDto);
         return T + "edit-student";
     }
 
-    @PostMapping("/updateStudent")
+    @PostMapping("/updateStudent") //SAVING CHANGES
     public String updateStudent(@ModelAttribute("student") StudentDto studentDto) {
         studentService.updateStudent(studentDto);
         return "redirect:/students";

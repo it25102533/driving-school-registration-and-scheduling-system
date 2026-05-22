@@ -14,7 +14,6 @@ public class StudentDto {
     private String licenseCode;
     private String licenseCategory;
     private String licenseDisplay;
-    private String studentType;
     private String email;
     private String password;
     private String address;
