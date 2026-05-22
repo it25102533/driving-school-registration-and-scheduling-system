@@ -54,23 +54,23 @@
             <input id="name" th:field="*{name}" type="text" placeholder="John Doe" required/>
 
             <label for="email">Email Address</label>
-            <input id="email" th:field="*{email}" type="email" placeholder="john@example.com" required autocomplete="email"/>
+            <input id="email" th:field="*{email}" type="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address" placeholder="john@example.com" required autocomplete="email"/>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input id="password" th:field="*{password}" type="password" placeholder="Min 6 chars" required minlength="6" autocomplete="new-password"/>
+                    <input id="password" th:field="*{password}" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" placeholder="Min 8 chars, 1 uppercase, 1 number" required autocomplete="new-password"/>
                 </div>
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm" required minlength="6" autocomplete="new-password"/>
+                    <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm" required minlength="8" autocomplete="new-password"/>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input id="phone" th:field="*{phone}" type="text" placeholder="e.g. 0771234567" autocomplete="tel"/>
+                    <input id="phone" th:field="*{phone}" type="tel" pattern="0[0-9]{9}" maxlength="10" title="Phone number must be exactly 10 digits and start with 0." placeholder="e.g. 0771234567" autocomplete="tel" required/>
                 </div>
                 <div class="form-group">
                     <label for="age">Age</label>
