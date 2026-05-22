@@ -9,9 +9,9 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     // Derived query method to fetch payment history for a specific student cleanly
-    List<Payment> findByStudent_Id(Long studentId);
+    List<Payment> findByStudent_Id(Long studentId); // SEARCH FOR ID
 
-    java.util.Optional<Payment> findByIdAndStudent_Id(Long id, Long studentId);
+    java.util.Optional<Payment> findByIdAndStudent_Id(Long id, Long studentId); // MATCH THE STUID AND PAYID
 
-    void deleteByStudent_Id(Long studentId);
+    void deleteByStudent_Id(Long studentId); // WHEN A STUDENT IS REMOVED THE HISTORY IS ALSO REMOVED
 }
