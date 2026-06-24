@@ -17,6 +17,9 @@ public class VehicleService {
     }
 
     public void addVehicle(VehicleDto dto) {
+        if (dto.getPlateNumber() != null && vehicleRepository.existsByPlateNumber(dto.getPlateNumber().trim())) {
+            throw new IllegalArgumentException("A vehicle with plate number " + dto.getPlateNumber() + " is already registered.");
+        }
         Vehicle vehicle = new Vehicle();
         mapDtoToEntity(dto, vehicle);
         vehicleRepository.save(vehicle);
@@ -45,6 +48,11 @@ public class VehicleService {
     public void updateVehicle(VehicleDto dto) {
         Vehicle vehicle = vehicleRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid vehicle Id: " + dto.getId()));
+
+        if (dto.getPlateNumber() != null && !dto.getPlateNumber().trim().equalsIgnoreCase(vehicle.getPlateNumber())
+                && vehicleRepository.existsByPlateNumber(dto.getPlateNumber().trim())) {
+            throw new IllegalArgumentException("A vehicle with plate number " + dto.getPlateNumber() + " is already registered.");
+        }
 
         mapDtoToEntity(dto, vehicle);
         vehicleRepository.save(vehicle);

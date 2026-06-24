@@ -81,6 +81,11 @@ public class StudentService {
         Student student = studentRepository.findById(dto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + dto.getId()));
 
+        if (dto.getEmail() != null && !dto.getEmail().equalsIgnoreCase(student.getEmail())
+                && studentRepository.existsByEmailIgnoreCase(dto.getEmail())) {
+            throw new IllegalArgumentException("Email is already registered by another student.");
+        }
+
         mapDtoToEntity(dto, student);
 
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {

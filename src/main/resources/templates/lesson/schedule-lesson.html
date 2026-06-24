@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#0c1222"/>
-    <title>Book a Lesson — RoadSync</title>
+    <title>Schedule Lesson — RoadSync</title>
     <link rel="stylesheet" th:href="@{/landing.css}"/>
     <link rel="stylesheet" th:href="@{/subsystem.css}"/>
 </head>
@@ -13,23 +13,23 @@
 <header th:replace="~{fragments/roadsync :: header('other')}"></header>
 
 <main class="rs-main student-shell">
-    <div th:replace="~{fragments/student-nav :: nav('book')}"></div>
+    <div th:replace="~{fragments/student-nav :: nav('lessons')}"></div>
 
     <div class="student-hero">
-        <h1>Book a <span style="color: var(--rs-teal);">lesson</span></h1>
-        <p>Choose your instructor, time, and vehicle preferences.</p>
+        <h1>Schedule your <span style="color: var(--rs-teal);">lesson</span></h1>
+        <p>Set a date, time, and vehicle preference for your package lesson.</p>
     </div>
 
     <div class="form-wrapper">
         <div class="form-container rs-form-wide">
-            <h2>Book a driving lesson</h2>
+            <h2>Schedule Lesson</h2>
             <p th:if="${error}" class="error-msg" th:text="${error}" style="color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 1rem; text-align: center; border: 1px solid #f87171;"></p>
 
-            <form th:action="@{/student/book-lesson/save}" th:object="${lesson}" method="post">
+            <form th:action="@{/student/schedule-lesson/save}" th:object="${lesson}" method="post">
+                <input type="hidden" th:field="*{id}"/>
 
                 <label for="instructorId">Instructor</label>
                 <select id="instructorId" th:field="*{instructorId}" required>
-                    <option value="" disabled selected>— Choose an instructor —</option>
                     <option th:each="inst : ${instructors}" th:value="${inst.id}" th:text="${inst.name}"></option>
                 </select>
 
@@ -49,7 +49,7 @@
                 <label for="lessonTime">Date &amp; time</label>
                 <input type="datetime-local" id="lessonTime" th:field="*{lessonTime}" required>
 
-                <button type="submit">Confirm booking</button>
+                <button type="submit">Schedule Lesson</button>
             </form>
         </div>
     </div>

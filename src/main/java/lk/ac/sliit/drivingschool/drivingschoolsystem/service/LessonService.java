@@ -2,6 +2,7 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.service;
 
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.LessonDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Lesson;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Vehicle;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
@@ -36,7 +37,13 @@ public class LessonService {
         lesson.setInstructor(instructorRepository.findById(dto.getInstructorId()).orElseThrow());
 
         if (dto.getVehicleId() != null) {
-            lesson.setVehicle(vehicleRepository.findById(dto.getVehicleId()).orElse(null));
+            Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId()).orElseThrow();
+            if (dto.getVehicleType() != null && !dto.getVehicleType().equalsIgnoreCase("Any")) {
+                if (!vehicle.getType().toLowerCase().contains(dto.getVehicleType().toLowerCase())) {
+                    throw new IllegalArgumentException("Selected vehicle type mismatch. The lesson requires a " + dto.getVehicleType() + " vehicle, but the selected vehicle is " + vehicle.getType() + ".");
+                }
+            }
+            lesson.setVehicle(vehicle);
         }
 
         lesson.setLessonTime(LocalDateTime.parse(dto.getLessonTime()));
@@ -65,6 +72,8 @@ public class LessonService {
 
             if (lesson.getLessonTime() != null) {
                 dto.setFormattedDate(lesson.getLessonTime().format(formatter));
+            } else {
+                dto.setFormattedDate("Not Scheduled Yet");
             }
 
             return dto;
@@ -95,9 +104,53 @@ public class LessonService {
 
             if (lesson.getLessonTime() != null) {
                 dto.setFormattedDate(lesson.getLessonTime().format(formatter));
+            } else {
+                dto.setFormattedDate("Not Scheduled Yet");
             }
 
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public void scheduleLesson(LessonDto dto) {
+        Lesson lesson = lessonRepository.findById(dto.getId()).orElseThrow();
+        lesson.setInstructor(instructorRepository.findById(dto.getInstructorId()).orElseThrow());
+        
+        if (dto.getVehicleId() != null) {
+            Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId()).orElseThrow();
+            if (dto.getVehicleType() != null && !dto.getVehicleType().equalsIgnoreCase("Any")) {
+                if (!vehicle.getType().toLowerCase().contains(dto.getVehicleType().toLowerCase())) {
+                    throw new IllegalArgumentException("Selected vehicle type mismatch. The lesson requires a " + dto.getVehicleType() + " vehicle, but the selected vehicle is " + vehicle.getType() + ".");
+                }
+            }
+            lesson.setVehicle(vehicle);
+        } else {
+            lesson.setVehicle(null);
+        }
+        
+        lesson.setLessonTime(LocalDateTime.parse(dto.getLessonTime()));
+        lesson.setStatus("SCHEDULED");
+        lesson.setVehicleType(dto.getVehicleType());
+        
+        lessonRepository.save(lesson);
+    }
+
+    public LessonDto getLessonById(Long id) {
+        Lesson lesson = lessonRepository.findById(id).orElseThrow();
+        LessonDto dto = new LessonDto();
+        dto.setId(lesson.getId());
+        dto.setStudentId(lesson.getStudent().getId());
+        dto.setInstructorId(lesson.getInstructor().getId());
+        dto.setInstructorName(lesson.getInstructor().getName());
+        if (lesson.getVehicle() != null) {
+            dto.setVehicleId(lesson.getVehicle().getId());
+            dto.setVehicleModel(lesson.getVehicle().getModel());
+        }
+        if (lesson.getLessonTime() != null) {
+            dto.setLessonTime(lesson.getLessonTime().toString());
+        }
+        dto.setStatus(lesson.getStatus());
+        dto.setVehicleType(lesson.getVehicleType());
+        return dto;
     }
 }

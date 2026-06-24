@@ -34,13 +34,21 @@ public class LessonController {
     }
 
     @PostMapping("/book-lesson/save")
-    public String saveBooking(@ModelAttribute("lesson") LessonDto dto, HttpSession session) {
+    public String saveBooking(@ModelAttribute("lesson") LessonDto dto, HttpSession session, Model model) {
         // Automatically link the lesson to the logged-in student from the active session
         Student student = (Student) session.getAttribute("SESSION_STUDENT");
         dto.setStudentId(student.getId());
 
-        lessonService.bookLesson(dto);
-        return "redirect:/student/my-lessons";
+        try {
+            lessonService.bookLesson(dto);
+            return "redirect:/student/my-lessons";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("lesson", dto);
+            model.addAttribute("instructors", instructorRepository.findAll());
+            model.addAttribute("vehicles", vehicleRepository.findAll());
+            return "lesson/book-lesson";
+        }
     }
 
     @GetMapping("/my-lessons")
@@ -54,5 +62,28 @@ public class LessonController {
     public String cancelLesson(@RequestParam Long id) {
         lessonService.cancelLesson(id);
         return "redirect:/student/my-lessons";
+    }
+
+    @GetMapping("/schedule-lesson")
+    public String showScheduleForm(@RequestParam Long id, Model model) {
+        LessonDto dto = lessonService.getLessonById(id);
+        model.addAttribute("lesson", dto);
+        model.addAttribute("instructors", instructorRepository.findAll());
+        model.addAttribute("vehicles", vehicleRepository.findAll());
+        return "lesson/schedule-lesson";
+    }
+
+    @PostMapping("/schedule-lesson/save")
+    public String saveSchedule(@ModelAttribute("lesson") LessonDto dto, Model model) {
+        try {
+            lessonService.scheduleLesson(dto);
+            return "redirect:/student/my-lessons";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("lesson", dto);
+            model.addAttribute("instructors", instructorRepository.findAll());
+            model.addAttribute("vehicles", vehicleRepository.findAll());
+            return "lesson/schedule-lesson";
+        }
     }
 }

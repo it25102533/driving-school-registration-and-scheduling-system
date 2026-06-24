@@ -25,6 +25,7 @@
     <div class="form-wrapper">
         <div class="form-container rs-form-wide">
             <h2>Add vehicle</h2>
+            <p th:if="${error}" class="error-msg" th:text="${error}" style="color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 1rem; text-align: center; border: 1px solid #f87171;"></p>
             <form th:action="@{/vehicles/save}" th:object="${vehicle}" method="post">
                 <label for="model">Model</label>
                 <input type="text" id="model" th:field="*{model}" placeholder="e.g. Toyota Prius" required>

@@ -43,7 +43,10 @@
                           th:classappend="${lesson.status == 'CANCELLED'} ? ' rs-status-bad' : ' rs-status-ok'"></span>
                 </td>
                 <td>
-                    <a th:if="${lesson.status != 'CANCELLED'}"
+                    <a th:if="${lesson.status == 'Pending'}"
+                       th:href="@{/student/schedule-lesson(id=${lesson.id})}"
+                       class="edit-btn">Schedule</a>
+                    <a th:if="${lesson.status != 'CANCELLED' and lesson.status != 'Pending'}"
                        th:href="@{/student/cancel-lesson(id=${lesson.id})}"
                        class="delete-btn"
                        onclick="return confirm('Cancel this lesson?');">Cancel</a>
