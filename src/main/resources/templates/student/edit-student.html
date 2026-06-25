@@ -43,6 +43,12 @@
                     <th:block th:replace="~{fragments/license-options :: licenseOptions}"></th:block>
                 </select>
 
+                <label for="transmissionPreference">Transmission Preference</label>
+                <select id="transmissionPreference" th:field="*{transmissionPreference}" required>
+                    <option value="Automatic">Automatic</option>
+                    <option value="Manual">Manual</option>
+                </select>
+
                 <label for="phone">Phone</label>
                 <input type="tel" id="phone" th:field="*{phone}" pattern="0[0-9]{9}" maxlength="10" title="Phone number must be exactly 10 digits and start with 0." required>
 

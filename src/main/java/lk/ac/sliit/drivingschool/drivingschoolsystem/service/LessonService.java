@@ -33,8 +33,12 @@ public class LessonService {
     public void bookLesson(LessonDto dto) {
         Lesson lesson = new Lesson();
 
-        lesson.setStudent(studentRepository.findById(dto.getStudentId()).orElseThrow());
+        Student student = studentRepository.findById(dto.getStudentId()).orElseThrow();
+        lesson.setStudent(student);
         lesson.setInstructor(instructorRepository.findById(dto.getInstructorId()).orElseThrow());
+
+        // Override transmission preference using student's profile transmission preference
+        dto.setVehicleType(student.getTransmissionPreference());
 
         if (dto.getVehicleId() != null) {
             Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId()).orElseThrow();
@@ -65,7 +69,7 @@ public class LessonService {
             dto.setInstructorName(lesson.getInstructor().getName());
 
             if (lesson.getVehicle() != null) {
-                dto.setVehicleModel(lesson.getVehicle().getModel());
+                dto.setVehicleModel(lesson.getVehicle().getModel() + " (" + lesson.getVehicle().getType() + ")");
             } else {
                 dto.setVehicleModel("Not Assigned Yet");
             }
@@ -97,7 +101,7 @@ public class LessonService {
             dto.setStudentName(lesson.getStudent().getName());
 
             if (lesson.getVehicle() != null) {
-                dto.setVehicleModel(lesson.getVehicle().getModel());
+                dto.setVehicleModel(lesson.getVehicle().getModel() + " (" + lesson.getVehicle().getType() + ")");
             } else {
                 dto.setVehicleModel("Not Assigned Yet");
             }
@@ -114,7 +118,12 @@ public class LessonService {
 
     public void scheduleLesson(LessonDto dto) {
         Lesson lesson = lessonRepository.findById(dto.getId()).orElseThrow();
+        Student student = lesson.getStudent();
+        
         lesson.setInstructor(instructorRepository.findById(dto.getInstructorId()).orElseThrow());
+        
+        // Override transmission preference using student's profile transmission preference
+        dto.setVehicleType(student.getTransmissionPreference());
         
         if (dto.getVehicleId() != null) {
             Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId()).orElseThrow();
@@ -144,7 +153,7 @@ public class LessonService {
         dto.setInstructorName(lesson.getInstructor().getName());
         if (lesson.getVehicle() != null) {
             dto.setVehicleId(lesson.getVehicle().getId());
-            dto.setVehicleModel(lesson.getVehicle().getModel());
+            dto.setVehicleModel(lesson.getVehicle().getModel() + " (" + lesson.getVehicle().getType() + ")");
         }
         if (lesson.getLessonTime() != null) {
             dto.setLessonTime(lesson.getLessonTime().toString());

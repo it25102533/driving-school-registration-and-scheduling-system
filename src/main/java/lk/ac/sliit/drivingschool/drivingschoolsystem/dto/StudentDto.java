@@ -11,6 +11,7 @@ public class StudentDto {
     private String phone;
     private int age;
     private String licenseType;
+    private String transmissionPreference;
     private String licenseCode;
     private String licenseCategory;
     private String licenseDisplay;

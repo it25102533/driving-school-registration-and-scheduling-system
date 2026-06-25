@@ -121,6 +121,7 @@ public class StudentService {
         student.setPhone(dto.getPhone());
         student.setAge(dto.getAge());
         student.setLicenseType(dto.getLicenseType());
+        student.setTransmissionPreference(dto.getTransmissionPreference());
         student.setEmail(dto.getEmail());
         student.setAddress(dto.getAddress());
     }
@@ -132,6 +133,7 @@ public class StudentService {
         dto.setPhone(student.getPhone());
         dto.setAge(student.getAge());
         dto.setLicenseType(student.getLicenseType());
+        dto.setTransmissionPreference(student.getTransmissionPreference());
         enrichLicenseFields(dto);
         dto.setEmail(student.getEmail());
         dto.setAddress(student.getAddress());

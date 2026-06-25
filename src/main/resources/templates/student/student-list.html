@@ -35,6 +35,7 @@
                 <th>Age</th>
                 <th>License type</th>
                 <th>Vehicle category</th>
+                <th>Transmission</th>
                 <th>Phone</th>
                 <th>Address</th>
                 <th>Action</th>
@@ -42,7 +43,7 @@
             </thead>
             <tbody>
             <tr th:if="${allStudents == null or allStudents.isEmpty()}">
-                <td colspan="9" style="text-align: center; color: var(--rs-muted);">No students found.</td>
+                <td colspan="10" style="text-align: center; color: var(--rs-muted);">No students found.</td>
             </tr>
             <tr th:each="s : ${allStudents}">
                 <td th:text="${s.id}"></td>
@@ -51,6 +52,7 @@
                 <td th:text="${s.age}"></td>
                 <td th:text="${s.licenseCode != null ? s.licenseCode : '—'}"></td>
                 <td th:text="${s.licenseCategory != null and !s.licenseCategory.isEmpty() ? s.licenseCategory : (s.licenseType != null ? s.licenseType : '—')}"></td>
+                <td th:text="${s.transmissionPreference}"></td>
                 <td th:text="${s.phone}"></td>
                 <td th:text="${s.address}"></td>
                 <td>
