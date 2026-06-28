@@ -30,4 +30,8 @@ public class Instructor extends Person {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id")
     private LessonPackage assignedPackage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle assignedVehicle;
 }

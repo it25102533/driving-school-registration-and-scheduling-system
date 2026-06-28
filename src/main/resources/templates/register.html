@@ -88,6 +88,12 @@
                 <th:block th:replace="~{fragments/license-options :: licenseOptions}"></th:block>
             </select>
 
+            <label for="transmissionPreference">Transmission Preference</label>
+            <select id="transmissionPreference" th:field="*{transmissionPreference}" required style="margin: 0.25rem 0 0.5rem;">
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
+            </select>
+
             <label for="address">Home Address</label>
             <textarea id="address" th:field="*{address}" rows="2" placeholder="123 Main St, City"></textarea>
 

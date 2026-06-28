@@ -62,6 +62,12 @@ public class PaymentService {
         Instructor assignedInstructor = null; // PICKING AND ASSIGNING INSTRUCTOR
         if (!availableInstructors.isEmpty()) {
             assignedInstructor = availableInstructors.get(0); // Pick first available one
+        } else {
+            // Fallback: If no instructors are assigned to this package, pick the first overall instructor in the database
+            List<Instructor> allInstructors = instructorRepository.findAll();
+            if (!allInstructors.isEmpty()) {
+                assignedInstructor = allInstructors.get(0);
+            }
         }
 
         if (assignedInstructor != null) {

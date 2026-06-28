@@ -20,6 +20,9 @@ public class Student extends Person {
 
     private String licenseType;
 
+    @Column(length = 20, nullable = false)
+    private String transmissionPreference = "Automatic";
+
     @Column(unique = true, length = 128, nullable = false)
     private String email;
 

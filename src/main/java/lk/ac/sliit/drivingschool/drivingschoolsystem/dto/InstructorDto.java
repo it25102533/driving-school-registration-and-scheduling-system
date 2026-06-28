@@ -20,4 +20,6 @@ public class InstructorDto {
     private String email;
     private String password;
     private Long assignedPackageId;
+    private Long assignedVehicleId;
+    private String assignedVehicleName;
 }

@@ -19,7 +19,7 @@ public class StudentController {
     private final StudentService studentService;
     private final ProgressService progressService;
 
-    public StudentController(StudentService studentService, ProgressService progressService) {
+    public StudentController(StudentService studentService, ProgressService progressService) { //*
         this.studentService = studentService;
         this.progressService = progressService;
     }

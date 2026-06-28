@@ -33,9 +33,15 @@ public class VehicleController {
     }
 
     @PostMapping("/save")
-    public String saveVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto) {
-        vehicleService.addVehicle(vehicleDto);
-        return "redirect:/vehicles";
+    public String saveVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model) {
+        try {
+            vehicleService.addVehicle(vehicleDto);
+            return "redirect:/vehicles";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("vehicle", vehicleDto);
+            return T + "add-vehicle";
+        }
     }
 
     @GetMapping("/edit")
@@ -46,9 +52,15 @@ public class VehicleController {
     }
 
     @PostMapping("/update")
-    public String updateVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto) {
-        vehicleService.updateVehicle(vehicleDto);
-        return "redirect:/vehicles";
+    public String updateVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model) {
+        try {
+            vehicleService.updateVehicle(vehicleDto);
+            return "redirect:/vehicles";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("vehicle", vehicleDto);
+            return T + "edit-vehicle";
+        }
     }
 
     @GetMapping("/delete")

@@ -31,12 +31,21 @@ public class WebConfig implements WebMvcConfigurer {
                 );
 
         registry.addInterceptor(instructorAuthInterceptor)
-                .addPathPatterns("/instructors/**", "/instructor/**", "/progress/**")
+                .addPathPatterns(
+                        "/instructors/**",
+                        "/instructors",
+                        "/instructor/**",
+                        "/progress/**",
+                        "/students",
+                        "/editStudent",
+                        "/deleteStudent",
+                        "/updateStudent",
+                        "/vehicles/**",
+                        "/vehicles"
+                )
                 .excludePathPatterns(
                         "/login/professional",
                         "/logout/professional",
-                        "/instructors/add",
-                        "/instructors/save",
                         "/js/**",
                         "/images/**",
                         "/css/**"

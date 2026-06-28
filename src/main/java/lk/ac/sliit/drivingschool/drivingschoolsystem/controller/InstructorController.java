@@ -3,6 +3,7 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.controller;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.InstructorDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.InstructorService;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.service.LessonPackageService;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.service.VehicleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,12 @@ public class InstructorController {
     private static final String T = "instructor/";
     private final InstructorService instructorService;
     private final LessonPackageService lessonPackageService;
+    private final VehicleService vehicleService;
 
-    public InstructorController(InstructorService instructorService, LessonPackageService lessonPackageService) {
+    public InstructorController(InstructorService instructorService, LessonPackageService lessonPackageService, VehicleService vehicleService) {
         this.instructorService = instructorService;
         this.lessonPackageService = lessonPackageService;
+        this.vehicleService = vehicleService;
     }
 
     @GetMapping
@@ -30,6 +33,7 @@ public class InstructorController {
     public String showAddForm(Model model) {
         model.addAttribute("instructor", new InstructorDto());
         model.addAttribute("packages", lessonPackageService.getAllPackages());
+        model.addAttribute("vehicles", vehicleService.getAllVehicles());
         return T + "add-instructor";
     }
 
@@ -42,6 +46,7 @@ public class InstructorController {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("instructor", dto);
             model.addAttribute("packages", lessonPackageService.getAllPackages());
+            model.addAttribute("vehicles", vehicleService.getAllVehicles());
             return T + "add-instructor";
         }
     }
@@ -50,6 +55,7 @@ public class InstructorController {
     public String showEditForm(@RequestParam Long id, Model model) {
         model.addAttribute("instructor", instructorService.getInstructorById(id));
         model.addAttribute("packages", lessonPackageService.getAllPackages());
+        model.addAttribute("vehicles", vehicleService.getAllVehicles());
         return T + "edit-instructor";
     }
 
@@ -62,6 +68,7 @@ public class InstructorController {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("instructor", dto);
             model.addAttribute("packages", lessonPackageService.getAllPackages());
+            model.addAttribute("vehicles", vehicleService.getAllVehicles());
             return T + "edit-instructor";
         }
     }

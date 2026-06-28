@@ -6,9 +6,13 @@ import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.PackageRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.StudentFeedback;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentFeedbackRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.VehicleRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,15 +25,21 @@ public class InstructorService {
     private final PasswordEncoder passwordEncoder;
     private final LessonRepository lessonRepository;
     private final PackageRepository packageRepository;
+    private final StudentFeedbackRepository feedbackRepository;
+    private final VehicleRepository vehicleRepository;
 
     public InstructorService(InstructorRepository instructorRepository,
                              PasswordEncoder passwordEncoder,
                              LessonRepository lessonRepository,
-                             PackageRepository packageRepository) {
+                             PackageRepository packageRepository,
+                             StudentFeedbackRepository feedbackRepository,
+                             VehicleRepository vehicleRepository) {
         this.instructorRepository = instructorRepository;
         this.passwordEncoder = passwordEncoder;
         this.lessonRepository = lessonRepository;
         this.packageRepository = packageRepository;
+        this.feedbackRepository = feedbackRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public void addInstructor(InstructorDto dto) {
@@ -56,6 +66,14 @@ public class InstructorService {
     @Transactional
     public void deleteInstructor(Long id) {
         lessonRepository.deleteByInstructor_Id(id);
+        
+        // Nullify instructor in student feedbacks so they are not orphaned and don't block deletion
+        List<StudentFeedback> feedbacks = feedbackRepository.findByInstructorId(id);
+        for (StudentFeedback f : feedbacks) {
+            f.setInstructor(null);
+            feedbackRepository.save(f);
+        }
+        
         instructorRepository.deleteById(id);
     }
 
@@ -111,6 +129,12 @@ public class InstructorService {
         } else {
             inst.setAssignedPackage(null);
         }
+
+        if (dto.getAssignedVehicleId() != null) {
+            inst.setAssignedVehicle(vehicleRepository.findById(dto.getAssignedVehicleId()).orElse(null));
+        } else {
+            inst.setAssignedVehicle(null);
+        }
     }
 
     private InstructorDto mapEntityToDto(Instructor inst) {
@@ -123,6 +147,10 @@ public class InstructorService {
         dto.setEmail(inst.getEmail());
         if (inst.getAssignedPackage() != null) {
             dto.setAssignedPackageId(inst.getAssignedPackage().getId());
+        }
+        if (inst.getAssignedVehicle() != null) {
+            dto.setAssignedVehicleId(inst.getAssignedVehicle().getId());
+            dto.setAssignedVehicleName(inst.getAssignedVehicle().getModel() + " (" + inst.getAssignedVehicle().getPlateNumber() + ")");
         }
         return dto;
     }

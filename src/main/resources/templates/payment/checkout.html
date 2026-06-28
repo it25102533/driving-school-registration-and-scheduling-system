@@ -13,15 +13,22 @@
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
             margin-top: 2rem;
+            margin-bottom: 4rem;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 960px;
+            padding: 0 1.5rem;
             align-items: start;
+            box-sizing: border-box;
         }
 
         .order-summary, .payment-form {
-            background: var(--rs-surface);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--rs-card);
+            border: 1px solid var(--rs-border);
             border-radius: 12px;
             padding: 2rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
         }
 
         .order-summary h2, .payment-form h2 {
@@ -29,7 +36,7 @@
             color: var(--rs-text);
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--rs-border);
             padding-bottom: 0.5rem;
         }
 
@@ -44,7 +51,7 @@
             color: var(--rs-text);
             font-size: 1.25rem;
             font-weight: 600;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid var(--rs-border);
             padding-top: 1rem;
             margin-top: 1rem;
         }
@@ -62,8 +69,9 @@
 
         .rs-input-group input {
             width: 100%;
+            box-sizing: border-box;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--rs-border);
             border-radius: 8px;
             padding: 0.75rem 1rem;
             color: var(--rs-text);
@@ -73,7 +81,7 @@
 
         .rs-input-group input:focus {
             outline: none;
-            border-color: var(--rs-primary);
+            border-color: var(--rs-accent);
             background: rgba(255, 255, 255, 0.1);
         }
 
@@ -83,22 +91,38 @@
             gap: 1rem;
         }
 
+        .card-type-label {
+            display: flex !important;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--rs-text);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .card-type-label input[type="radio"] {
+            width: auto !important;
+            margin: 0;
+            cursor: pointer;
+        }
+
         .card-icon {
-            width: 50px;
-            height: 30px;
+            width: 60px;
+            height: 35px;
             background: #fff;
-            border-radius: 4px;
-            display: flex;
+            border-radius: 6px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 700;
             color: #1a1f2e;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
         .btn-pay {
             width: 100%;
-            background: var(--rs-primary);
+            background: linear-gradient(135deg, var(--rs-accent) 0%, var(--rs-teal) 100%);
             color: white;
             border: none;
             padding: 1rem;
@@ -110,13 +134,15 @@
         }
 
         .btn-pay:hover {
-            background: var(--rs-primary-hover);
+            filter: brightness(1.08);
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--rs-glow);
         }
 
         @media (max-width: 768px) {
             .checkout-container {
                 grid-template-columns: 1fr;
+                padding: 0 1rem;
             }
         }
     </style>
@@ -162,13 +188,13 @@
                 <div class="rs-input-group" style="margin-bottom: 1.5rem;">
                     <label>Select Card Type</label>
                     <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--rs-text); font-size: 1rem; cursor: pointer;">
-                            <input type="radio" name="cardType" value="VISA" checked style="width: auto;">
-                            <span class="card-icon" style="background: #1a1f36; color: white; display: inline-flex; margin-bottom: 0;">VISA</span>
+                        <label class="card-type-label">
+                            <input type="radio" name="cardType" value="VISA" checked>
+                            <span class="card-icon" style="background: #1a1f36; color: white;">VISA</span>
                         </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--rs-text); font-size: 1rem; cursor: pointer;">
-                            <input type="radio" name="cardType" value="MASTERCARD" style="width: auto;">
-                            <span class="card-icon" style="background: #eb001b; color: white; display: inline-flex; margin-bottom: 0;">MC</span>
+                        <label class="card-type-label">
+                            <input type="radio" name="cardType" value="MASTERCARD">
+                            <span class="card-icon" style="background: #eb001b; color: white;">MC</span>
                         </label>
                     </div>
                 </div>
