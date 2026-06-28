@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.VehicleRepository;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,17 +26,20 @@ public class InstructorService {
     private final LessonRepository lessonRepository;
     private final PackageRepository packageRepository;
     private final StudentFeedbackRepository feedbackRepository;
+    private final VehicleRepository vehicleRepository;
 
     public InstructorService(InstructorRepository instructorRepository,
                              PasswordEncoder passwordEncoder,
                              LessonRepository lessonRepository,
                              PackageRepository packageRepository,
-                             StudentFeedbackRepository feedbackRepository) {
+                             StudentFeedbackRepository feedbackRepository,
+                             VehicleRepository vehicleRepository) {
         this.instructorRepository = instructorRepository;
         this.passwordEncoder = passwordEncoder;
         this.lessonRepository = lessonRepository;
         this.packageRepository = packageRepository;
         this.feedbackRepository = feedbackRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public void addInstructor(InstructorDto dto) {
@@ -124,6 +129,12 @@ public class InstructorService {
         } else {
             inst.setAssignedPackage(null);
         }
+
+        if (dto.getAssignedVehicleId() != null) {
+            inst.setAssignedVehicle(vehicleRepository.findById(dto.getAssignedVehicleId()).orElse(null));
+        } else {
+            inst.setAssignedVehicle(null);
+        }
     }
 
     private InstructorDto mapEntityToDto(Instructor inst) {
@@ -136,6 +147,10 @@ public class InstructorService {
         dto.setEmail(inst.getEmail());
         if (inst.getAssignedPackage() != null) {
             dto.setAssignedPackageId(inst.getAssignedPackage().getId());
+        }
+        if (inst.getAssignedVehicle() != null) {
+            dto.setAssignedVehicleId(inst.getAssignedVehicle().getId());
+            dto.setAssignedVehicleName(inst.getAssignedVehicle().getModel() + " (" + inst.getAssignedVehicle().getPlateNumber() + ")");
         }
         return dto;
     }

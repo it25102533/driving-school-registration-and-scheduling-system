@@ -48,6 +48,12 @@
                     <option th:each="pkg : ${packages}" th:value="${pkg.id}" th:text="${pkg.packageName}"></option>
                 </select>
 
+                <label for="assignedVehicleId">Assigned Vehicle</label>
+                <select id="assignedVehicleId" th:field="*{assignedVehicleId}">
+                    <option value="">-- No Vehicle Assigned --</option>
+                    <option th:each="veh : ${vehicles}" th:value="${veh.id}" th:text="${veh.model} + ' (' + ${veh.plateNumber} + ' - ' + ${veh.type} + ')'"></option>
+                </select>
+
                 <label for="password">Password</label>
                 <input type="password" id="password" th:field="*{password}" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
 

@@ -31,6 +31,7 @@
                 <th>Phone</th>
                 <th>License</th>
                 <th>Specialization</th>
+                <th>Assigned Vehicle</th>
                 <th>Email</th>
                 <th>Action</th>
             </tr>
@@ -42,6 +43,7 @@
                 <td th:text="${inst.phone}"></td>
                 <td th:text="${inst.licenseNumber}"></td>
                 <td th:text="${inst.specialization}"></td>
+                <td th:text="${inst.assignedVehicleName != null ? inst.assignedVehicleName : 'None'}"></td>
                 <td th:text="${inst.email}"></td>
                 <td>
                     <a th:href="@{/instructors/edit(id=${inst.id})}" class="edit-btn">Edit</a>

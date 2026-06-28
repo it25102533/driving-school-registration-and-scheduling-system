@@ -59,8 +59,8 @@ public class LessonController {
             lessonService.bookLesson(dto);
             return "redirect:/student/my-lessons";
         } catch (IllegalArgumentException e) {
-            Student student = studentRepository.findById(sessionStudent.getId()).orElseThrow();
-            String preference = student.getTransmissionPreference();
+            Student dbStudent = studentRepository.findById(student.getId()).orElseThrow();
+            String preference = dbStudent.getTransmissionPreference();
             List<Vehicle> matchedVehicles = vehicleRepository.findAll().stream()
                     .filter(v -> v.getType() != null && v.getType().equalsIgnoreCase(preference))
                     .toList();

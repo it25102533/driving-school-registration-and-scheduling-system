@@ -3,7 +3,10 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.service;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.VehicleDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Vehicle;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.VehicleRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,9 +14,11 @@ import java.util.List;
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
+    private final InstructorRepository instructorRepository;
 
-    public VehicleService(VehicleRepository vehicleRepository) {
+    public VehicleService(VehicleRepository vehicleRepository, InstructorRepository instructorRepository) {
         this.vehicleRepository = vehicleRepository;
+        this.instructorRepository = instructorRepository;
     }
 
     public void addVehicle(VehicleDto dto) {
@@ -29,7 +34,13 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
+    @Transactional
     public void deleteVehicle(Long id) {
+        List<Instructor> instructors = instructorRepository.findByAssignedVehicle_Id(id);
+        for (Instructor inst : instructors) {
+            inst.setAssignedVehicle(null);
+            instructorRepository.save(inst);
+        }
         vehicleRepository.deleteById(id);
     }
 

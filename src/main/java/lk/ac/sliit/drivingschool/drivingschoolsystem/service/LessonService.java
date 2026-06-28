@@ -3,6 +3,8 @@ package lk.ac.sliit.drivingschool.drivingschoolsystem.service;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.dto.LessonDto;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Lesson;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Vehicle;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Student;
+import lk.ac.sliit.drivingschool.drivingschoolsystem.entity.Instructor;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.LessonRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.StudentRepository;
 import lk.ac.sliit.drivingschool.drivingschoolsystem.repository.InstructorRepository;
@@ -35,7 +37,8 @@ public class LessonService {
 
         Student student = studentRepository.findById(dto.getStudentId()).orElseThrow();
         lesson.setStudent(student);
-        lesson.setInstructor(instructorRepository.findById(dto.getInstructorId()).orElseThrow());
+        Instructor instructor = instructorRepository.findById(dto.getInstructorId()).orElseThrow();
+        lesson.setInstructor(instructor);
 
         // Override transmission preference using student's profile transmission preference
         dto.setVehicleType(student.getTransmissionPreference());
@@ -48,6 +51,15 @@ public class LessonService {
                 }
             }
             lesson.setVehicle(vehicle);
+        } else {
+            // Assign default vehicle of instructor if available and matching preference
+            if (instructor.getAssignedVehicle() != null) {
+                Vehicle defaultVehicle = instructor.getAssignedVehicle();
+                if (dto.getVehicleType() == null || dto.getVehicleType().equalsIgnoreCase("Any") ||
+                        defaultVehicle.getType().toLowerCase().contains(dto.getVehicleType().toLowerCase())) {
+                    lesson.setVehicle(defaultVehicle);
+                }
+            }
         }
 
         lesson.setLessonTime(LocalDateTime.parse(dto.getLessonTime()));
@@ -120,7 +132,8 @@ public class LessonService {
         Lesson lesson = lessonRepository.findById(dto.getId()).orElseThrow();
         Student student = lesson.getStudent();
         
-        lesson.setInstructor(instructorRepository.findById(dto.getInstructorId()).orElseThrow());
+        Instructor instructor = instructorRepository.findById(dto.getInstructorId()).orElseThrow();
+        lesson.setInstructor(instructor);
         
         // Override transmission preference using student's profile transmission preference
         dto.setVehicleType(student.getTransmissionPreference());
@@ -134,7 +147,18 @@ public class LessonService {
             }
             lesson.setVehicle(vehicle);
         } else {
-            lesson.setVehicle(null);
+            // Assign default vehicle of instructor if available and matching preference
+            if (instructor.getAssignedVehicle() != null) {
+                Vehicle defaultVehicle = instructor.getAssignedVehicle();
+                if (dto.getVehicleType() == null || dto.getVehicleType().equalsIgnoreCase("Any") ||
+                        defaultVehicle.getType().toLowerCase().contains(dto.getVehicleType().toLowerCase())) {
+                    lesson.setVehicle(defaultVehicle);
+                } else {
+                    lesson.setVehicle(null);
+                }
+            } else {
+                lesson.setVehicle(null);
+            }
         }
         
         lesson.setLessonTime(LocalDateTime.parse(dto.getLessonTime()));

@@ -12,4 +12,5 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
     boolean existsByEmailIgnoreCase(String email);
 
     List<Instructor> findByAssignedPackage_Id(Long packageId);
+    List<Instructor> findByAssignedVehicle_Id(Long vehicleId);
 }
